@@ -136,7 +136,7 @@ Most people use the official TypeScript compiler for the task of converting ".ts
 
 However, for larger projects, the compilation time can start to get annoying. The root of the issue is twofold. First, the `tsc` tool is doing both compilation (i.e. generating ".js" files) and type-checking (i.e. checking for errors) at the same time. Second, the TypeScript compiler is itself written in TypeScript, which is not the most performant language.
 
-Thankfully, in 2024 we have a solution for this. Large projects can use tools like [esbuild](https://esbuild.github.io/) (written in Golang) or [swc](https://swc.rs/) (written in Rust) to only compile the code. Both of these perform orders of magnitude faster than the official TypeScript compiler.
+Thankfully, in 2024 we have a solution for this. Large projects can use tools like [esbuild](https://esbuild.github.io/) (written in Golang) or [swc](https://swc.rs/) (written in Rust) to only compile the code (and skip type-checking it). Both of these perform orders of magnitude faster than the official TypeScript compiler.
 
 Thus, "TypeScript compilation is slow" is not a reason anymore to not use TypeScript, and this is not a motivating factor to want to remove the build step more generally.
 
