@@ -73,7 +73,7 @@ I have been heavily using TypeScript since 2019. This is a collectible of my opi
     "editor.formatOnSave": true,
     "editor.tabSize": 2,
   },
-  "[css][json][jsonc][html][markdown][postcss][yaml][xml]": {
+  "[css][json][jsonc][html][markdown][postcss][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.tabSize": 2,
