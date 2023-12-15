@@ -208,7 +208,10 @@ Would be equivalent to:
 
 JSDoc also has [some support for generics](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html). You can even put JSDoc types in dedicated ".js" files and then import them elsewhere in the codebase.
 
-Now let's go over the bad. You [cannot do wildcard imports](https://github.com/microsoft/TypeScript/issues/41825). This in turn makes [dealing with some generics pretty painful](https://github.com/microsoft/TypeScript/issues/41825#issuecomment-1855755546).
+Now let's go over the bad:
+
+- You [cannot do wildcard imports](https://github.com/microsoft/TypeScript/issues/41825).
+- There are problems with [importing generic types](https://github.com/microsoft/TypeScript/issues/41825#issuecomment-1855755546).
 
 With projects of sufficient complexity, the time you spend battling JSDoc-related issues might exceed whatever other penalties you would have incurred by simply writing your code in TypeScript from the get-go.
 
