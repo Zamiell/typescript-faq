@@ -85,7 +85,7 @@ I have been heavily using TypeScript since 2019. This is a collectible of my opi
 
 - If a project has this configuration, then once anyone clones the repository, installs the npm dependencies (with e.g. `npm install`), and then opens the cloned directory in VSCode, then Prettier should automatically format the file upon saving.
 - In this situation, if Prettier is not working automatically, then you should check the following things:
-  - Are the dependencies properly installed? In other words, did you run `npm install`? (If a different package manager is used for the project, you might need to run `yarn install` or `pnpm install` instead.) The presence of a "node_modules" direcotry at the root of the project indicates that the dependencies for the project has been installed.
+  - Are the dependencies properly installed? In other words, did you run `npm install`? (If a different package manager is used for the project, you might need to run `yarn install` or `pnpm install` instead.) The presence of a "node_modules" direcotry at the root of the project usually indicates that the dependencies for the project has been properly installed (although it might not be there with non-standard package managers).
   - Are you using VSCode to open individual files or are you opening the project directory itself? For VSCode to work properly, you need to select "File" --> "Open Folder" and then point it at the cloned repository.
 
 <br>
