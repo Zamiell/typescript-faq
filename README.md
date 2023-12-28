@@ -44,6 +44,8 @@ Both `tsx` and `ts-node` are programs that allow you to run TypeScript files dir
 
 `tsx` has out-of-the-box support for ESM and tsconfig.json paths, so it will "just work" in many situations where `ts-node` will require additional configuration and/or not work at all. Furthermore, `tsx` is more actively developed/maintained as of the time of this writing (January 2024). Thus, I recommend always using `tsx` and never using `ts-node`.
 
+<br>
+
 # Why should I use Prettier?
 
 - It is extremely common for TypeScript projects to use the [Prettier](https://prettier.io/) code formatter, which makes sure that all the code has the same style.
