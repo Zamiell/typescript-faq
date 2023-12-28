@@ -40,7 +40,9 @@ I have been heavily using TypeScript since 2019. This is a collectible of my opi
 
 # Should I use [`tsx`](https://github.com/privatenumber/tsx) or [`ts-node`](https://github.com/TypeStrong/ts-node)?
 
-Both `tsx` and `ts-node` are programs that allow you to run TypeScript files directly without compiling them to JavaScript first. However, `tsx` has out-of-the-box support for ESM and tsconfig.json paths, so it will "just work" in many situations where `ts-node` will require additional configuration and/or not work at all. Furthermore, `tsx` is more actively developed/maintained as of the time of this writing (January 2024). Thus, I recommend always using `tsx` and never using `ts-node`.
+Both `tsx` and `ts-node` are programs that allow you to run TypeScript files directly without compiling them to JavaScript first. This is incredibly useful for testing out code in development, running project scripts, and more. But which is better?
+
+`tsx` has out-of-the-box support for ESM and tsconfig.json paths, so it will "just work" in many situations where `ts-node` will require additional configuration and/or not work at all. Furthermore, `tsx` is more actively developed/maintained as of the time of this writing (January 2024). Thus, I recommend always using `tsx` and never using `ts-node`.
 
 # Why should I use Prettier?
 
