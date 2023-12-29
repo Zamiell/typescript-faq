@@ -281,7 +281,7 @@ type Foo = {
 
 So which should you use? Which is better?
 
-Some YouTubers such as Matt Pocock have [a compelling argument for using types over interfaces](<https://www.youtube.com/watch?v=zM9UPcIyyhQ>). On the other hand, `interface` is the default option in the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule, which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the ESLint rule.
+Some YouTubers such as Matt Pocock have [a compelling argument for using types over interfaces](<https://www.youtube.com/watch?v=zM9UPcIyyhQ>). On the other hand, `interface` is the default option in the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule, which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the ESLint rule (which means using interfaces over types).
 
 For reference, the rule is automatically enabled as long as you inherit from the [`stylistic`](https://typescript-eslint.io/linting/configs/#stylistic) config from `typescript-eslint`. Alternatively, it is also automatically enabled if you use [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript).
 
