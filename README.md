@@ -260,3 +260,27 @@ For tiny projects (like one-off scripts), using JSDoc types makes a lot of sense
 But as soon as your project grows larger than a single file, you should probably start to think about converting your code to TypeScript. Troubleshooting bugs is not fun: any time that you would spend troubleshooting bugs that would be automatically caught by ESLint has to be weighed against the upfront, one-time cost of setting up TypeScript + ESlint.
 
 Part of the problem here is that setting up TypeScript + ESLint by hand can be time-intensive. One possible solution is to simply bootstrap all of your new projects, big or small, through a TypeScript + ESLint project bootstrapper such as [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app) or my personal tool [`isaacscript init-ts`](https://isaacscript.github.io/main/isaacscript-in-typescript).
+
+<br>
+
+# Should I use `interface` or `type`?
+
+In TypeScript, you can use both `interface` and `type` to model a basic object:
+
+```ts
+interface Foo {
+  bar: number;
+  baz: string;
+}
+
+type Foo = {
+  bar: number;
+  baz: string;
+};
+```
+
+So which should you use? Which is better?
+
+Some YouTubers such as Matt Pocock have [a compelling argument for using types over interfaces](<https://www.youtube.com/watch?v=zM9UPcIyyhQ>). On the other hand, `interface` is the default option in the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule, which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the rule.
+
+<br>
