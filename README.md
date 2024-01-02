@@ -435,7 +435,7 @@ declare const typeUser: TypeUser;
 - You will have to use both `interface` and `type` no matter what.
 - When you have a choice, you should use `interface` for practical reasons:
   - You don't have to be scared of declaration merging in most cases.
-  - The unambiguous names provide a better development experience.
+  - The unambiguous names provide a better development experience (for e.g. mouseover types and TypeScript error messages).
 - If you care about following ecosystem standards and conventions, then using `interface` is a no-brainer.
 
 <br>
