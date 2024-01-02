@@ -345,8 +345,33 @@ This argument has some merit, but it does not strike me as being very convincing
 
 - As mentioned above, declaration merging is a feature that `interface` has but `type` does not. Subsequently, you might be tempted to immediately mark this as a win for `interface`. But not so fast.
 - [Matt Pocock](https://www.youtube.com/@mattpocockuk) argues that [declaration merging is dangerous](https://www.youtube.com/watch?v=zM9UPcIyyhQ) in a similar way to having global variables in your program is dangerous. Thus, declaration merging is an anti-feature, and having it exist actually makes `interface` bad. Because declaration merging exists, you should try to use `type` over `interface` whenever possible so that you can avoid shooting yourself in the foot.
+
+#### Sub-argument 1: Accidental Usage
+
 - But how much of a footgun is declaration merging really? It turns out that as long as you use ESM, all things are module scoped - meaning that there is no chance of accidental cross-file declaration merging from name clashes. When using ESM, [you cannot even accidentally merge with a global type](https://www.typescriptlang.org/play?#code/JYOwLgpgTgZghgYwgAgHIHsAmKDeBYAKGWQBt0E4SAFKdABwC5kBnMKUAcwG5CBfQwtgQk4UFAnQhWySKyYZsPArLAA6MhWq06SlaoCCAFUMAlAJIAhAKqGAogH1UAeQAitpYQgAPOuihhkHF4uZAB6UOQJAFsoiHAZAAtgZmR0AFcAuBBMRJQ4ACN0ADcUaFooZExkuDo6CFFmQiA)!
-- In other words, the footgun from declaration merging only really applies when writing `.d.ts` files by hand, which is not something that we need to do in modern applications that are written in TypeScript from the get-go.
+- In other words, the footgun from declaration merging only really applies in very specific cases, like when writing `.d.ts` files with other interfaces in the global scope. This is not something that we need to do in modern applications that are written in TypeScript from the get-go.
+
+### Sub-argument 2: Types Should Be Constant
+
+- Most TypeScript programmers would agree that you should always use `const` instead of `let`, if possible. Programs are much easier to reason about without having to keep track of variable mutations. `let` is the root cause of many bugs!
+- This same concept applies to exported types. Even if an `interface` is properly exported, and both sides are using ESM, it is still possible for a consumer to mutate a library's type like this:
+
+```ts
+declare module "my-library" {
+  interface Foo {
+    sneakyExtraProperty: string;
+  }
+}
+```
+
+- It is not possible to mutate an exported `type`. In other words, `interface` is like `let`, and `type` is like `const`.
+- So, if you writing a library, you might feel compelled to keep track of any `interface` that you export, in order to code defensively around the fact that some user might extend them. But that's extra work for not much other gain. So this is a pretty good reason to prefer `type` over `interface`!
+- But let's step back for a moment. Just because it is _technically possible_ to mutate an existing `interface`, does not mean that it is something worth worrying about.
+- The previous analogy to `let` is a bit flawed in that it is trivial to mutate a `let` variable. But we have to deliberately go out of our way to declaration merge, such that it would be virtually impossible to do it by accident. In other words, the danger of immutability scales proportionally with how easy it is to mutate.
+- To illustrate this point, I think a good analogy is [the intended TypeScript escape hatch](https://github.com/microsoft/TypeScript/issues/19335) for accessing private fields. TypeScript rightly disallows accessing class fields marked as `private`, as you would expect. But the linked issue showcases that TypeScript actually allows access to private fields when you access them without the dot notation. This is very surprising for people who have not seen it before! But the escape hatch is very useful, as it allows classes to be better tested.
+- One could argue: "Since it is technically possible for people who consume your library's class to use the escape hatch to access your private variables, you should carefully code your class with safeguards that mitigate the damage they could do." One could go even farther: "You should not use `private` fields at all since they are technically unsafe". If you are like me, this probably strikes you as a weird argument: if someone is deliberately mutating your private variables, all bets are off and the warranty is void.
+- In other words, even though `private` variables are not technically private, we should treat them as such. And subsequently, even though `interface` is not technically constant, we should also treat them as such. Because when someone mutates private variables or mutates exported interfaces, they are breaking the implicit contract of the library, and it isn't our problem.
+- The conlusion here is that `type` is unambiguously safer, but the safety does not matter that much, and the safety might not be more important than the other advantages that `interface` has.
 
 ### Argument: Use `interface` Because Names Are Awesome
 
