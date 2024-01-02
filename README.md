@@ -1,10 +1,10 @@
-# FAQ
+# TypeScript FAQ
 
 <!-- markdownlint-disable MD033 -->
 
 ## Introduction
 
-I have been heavily using TypeScript since 2019. This is a collectible of my opinions and interpretations of current best-practices in the ecosystem.
+I have been heavily using [TypeScript](https://www.typescriptlang.org/) since 2019. This is a collectible of my opinions and interpretations of current best-practices in the ecosystem.
 
 <br>
 
