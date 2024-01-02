@@ -22,7 +22,7 @@ But the rabbit hole goes deeper.
 
 This was basically my experience with writing [Go](https://go.dev/) and using `gofmt`, which is distributed as part of the language. Because it was part of the language itself, `gofmt` got immediate and widespread adoption. Even most random StackOverflow questions have "correct" formatting!
 
-Why isn't every programming language like Go? I think that part of the problem is that when people try out a new language, they often use the same formatting and conventions that they used in their previous language. This fractures the ecosystem and makes everyone's code inconsistent and hard to read. The lesson of Go is that whenever you code in a language, you should use the standard style that everyone else uses for that language. In this way, every language can have the superpower that Go has.
+Why isn't every programming language like Go? Obviously, not all languages have official autoformatters, so in the absense of one, it can be hard for any one style to achieve dominance. But I think that another part of the problem is that when people try out a new language, they often use the same formatting and conventions that they used in their previous language. This fractures the ecosystem and makes code inconsistent. The lesson of Go is that whenever you code in a language, you should use the standard style that everyone else uses for that language. In this way, every language can have the superpower that Go has.
 
 Maybe your experience with your first autoformatter wasn't quite as earth-shattering as mine was with `gofmt`. If not, that's okay. Hopefully you can at least see the value in an ecosystem converging around a basic style. Based on this philosophy, we might come up with the following axiom:
 
