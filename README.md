@@ -383,16 +383,17 @@ declare module "my-library" {
 ### Argument: Use `interface` Because The Ecosystem Has Already Chosen `interface`
 
 - We previously explored some practical reasons why one would want to prefer `interface` over `type` or vice versa. I think the practical arguments point slightly towards using `type`. But to be honest, the practical reasons are not super powerful for one side or the other.
-- For this reason, whether to choose `interface` or `type` might mostly just come down to a matter of style. But when choosing the style for your TypeScript code, it makes a lot of sense to use the conventions that already prevail in the ecosystem. The idea is that we want our TypeScript code to look like everyone else's TypeScript code, since it makes it much easier for other people to read and understand. (You have probably heard that [code is read more often than it is written](https://skeptics.stackexchange.com/questions/48560/is-code-read-more-often-than-its-written).)
-- So what is the prevailing style in the ecosystem? The answer is `interface`. As mentioned in the previous section, this is mostly a historical artifact of `type` having some buggy behavior.
+- For this reason, whether to choose `interface` or `type` might mostly just come down to a matter of style. But when choosing the style for your TypeScript code, it makes a lot of sense to use the conventions that already prevail in the ecosystem. The idea is that we want our TypeScript code to look like everyone else's TypeScript code, since it makes it easier for other people to read and understand. (You have probably heard before that [code is read more often than it is written](https://skeptics.stackexchange.com/questions/48560/is-code-read-more-often-than-its-written).)
+- So what is the prevailing style in the ecosystem? The answer is `interface`. As mentioned previously, this is mostly a historical artifact of `type` having some buggy behavior.
 - This convention is codified inside of the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) ESLint rule. The rule ensures a consistent style for type definitions throughout a codebase, and the default option is `interface`.
 
 ## Conclusion
 
-- You will have to use both `interface` and `type` no matter what.
-- When you have a choice, you should use `interface` for practical reasons:
-  - You don't have to be scared of declaration merging in most cases.
-  - The unambiguous names provide a better development experience (for e.g. mouseover types and TypeScript error messages).
-- If you care about following ecosystem standards and conventions, then using `interface` is a no-brainer.
+- `interface` and `type` have subtle differences. Sometimes, choosing one over the other will make more sense. This could be that one of them is more semantically appropriate (so that people reading the code can more easily understand the type). Or it could be that one has a specific feature that you need.
+- Thus, in many codebases, we will have a mix of both `interface` and `type`, and it is impossible and/or not practical to remove one or the other entirely.
+- Subsequently, the debate mostly centers around which one to use for the "default" case of a basic object.
+- `type` has some small practical advantages over `interface`, but they matter much less in "modern" code (where we can ignore that declaration merging exists).
+- This means that whether to use `interface` or `type` for the default case is mostly a matter of style, in the same way that using tabs versus spaces is mostly a matter of style.
+- For the [same reason that would you want to use Prettier](https://prettier.io/docs/en/option-philosophy) to decide the debate between tabs versus spaces, it makes sense to follow the existing ecosystem convention of preferring `interface`.
 
 <br>
