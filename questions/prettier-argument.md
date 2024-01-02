@@ -17,7 +17,7 @@ But the mind-bending part starts to happen once you start working in and looking
 But the rabbit hole goes deeper.
 
 - "Blogs on the internet show code that also uses the same formatting tool. It is now effortless to read other random people's code."
-- "I have found that most code on StackOverflow also uses the same formatting tool. I can copy paste other people's code into my own codebase without having to change anything!"
+- "Most code on StackOverflow also uses the same formatting tool. I can copy paste other people's code into my own codebase without having to change anything!"
 - "I have become so used to this that it actually becomes annoying when I see code that is not formatted by the tool. It would be great if the _entire_ ecosystem would agree on the style from this tool!"
 
 This was basically my experience with writing [Golang](https://go.dev/) and using `gofmt`, which is distributed as part of the language. Because it was part of the language itself, `gofmt` got immediate and widespread adoption. Even most random StackOverflow questions have "correct" formatting!
