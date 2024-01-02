@@ -291,30 +291,25 @@ So which should you use? Which is better? First, let's go over the differences.
 - In other words, interfaces always produce a TypeScript compiler error, which is good. But intersection types may or may not produce a downstream error, which is bad!
 - Other concerns about `extends` vs intersection types generalize to the greater discussion of `interface` vs `type`, so we also need to take the other differences below into account.
 
-### 2) `implements` - ✔️ `interface` wins
-
-- `interface` can be implemented using `implements` on a class. (i.e. `class B implements A {}`)
-- `type` cannot do this.
-
-### 3) Declaration Merging - ✔️ `interface` wins
+### 2) Declaration Merging - ✔️ `interface` wins
 
 - `interface` can use declaration merging, which allows you to add new fields to an existing declared interface. For example, this is useful for augmenting `globals.Window`.
 - `type` can not be declaration merged.
 - Some people argue that declaration merging is actually dangerous, which makes it an anti-feature and automatically makes `interface` lose. More on that later on though.
 
-### 4) Opaque Naming - ✔️ `interface` wins
+### 3) Opaque Naming - ✔️ `interface` wins
 
 - `interface` creates a concrete, unique, named type.
 - `type` creates a type alias, which means that TypeScript sometimes forgets the name and just referst o the type as its anonymous object shape.
 - We discuss the benefits of opaque naming later on in more detail.
 
-### 5) Unions - ❌ `type` wins
+### 4) Unions - ❌ `type` wins
 
 - `interface` is for declaring the shape of objects.
 - `type` is for computing types based on other information.
 - It is idiomatic in TypeScript to represent an object as a [discriminated union](https://basarat.gitbook.io/typescript/type-system/discriminated-unions). Thus, if you have a type that is a composition of other types, you cannot use `interface` and must use `type`.
 
-### 6) Primitives - ❌ `type` wins
+### 5) Primitives - ❌ `type` wins
 
 - If you want to create a type that is based off of a primitive type (like `number`), then you cannot use `interface` and must use `type`.
 - This kind of thing is common when branding primitives for better type-safety. For example:
