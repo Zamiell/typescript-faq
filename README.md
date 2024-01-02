@@ -292,25 +292,21 @@ So which should you use? Which is better? First, let's go over the differences.
   - Of course, there are some edge-cases when we deliberately want to create a `never` type, or when [using `interface` is awkward](https://www.typescriptlang.org/play?#code/C4TwDgpgBAggjFAvFA3gWAFBW1MAnAezAC5UoBDUgZ2DwEsA7AcygF9N2NNRIoAhBMnhQAZKkw5chEmQBGpBgFcAtrIh42HTJgAmEAMYAbcnmj6CDGlFlxSAzLIB0+ItoyNg6gGbl90GABM4lg4LjIoFNS0jCycnJge3r7QfEEQAB6eDDpUsEHoIdhhpIEA2gDkYeUAuqJyCipqGnFuekYmZhZW8vwBDs7SmEA). So we can't use `extends` in _every_ situation. But in the general case, it is probably better to have more robust error handling.
 - Other concerns about `extends` vs intersection types generalize to the greater discussion of `interface` vs `type`, so we also need to take the other differences below into account.
 
-### 2) Declaration Merging - ✔️ `interface` wins (but it is debatable)
+### 2) Declaration Merging - Nobody wins (but it is debatable)
 
 - `interface` can use declaration merging, which allows you to add new fields to an existing declared interface. For example, this is useful for augmenting `globals.Window`.
 - `type` can not be declaration merged.
-- Some people argue that declaration merging is actually dangerous, which makes it an anti-feature and automatically makes `interface` lose. More on that later on though.
+- On the one hand, a feature that `interface` has and `type` does not have should make `interface` win.
+- On the other hand, declaration merging is considered to be confusing and dangerous. Some people advocate using `type` just so that you can avoid it altogether.
+- While I think that avoiding `interface` altogether just because declaration merging exists is a little too extreme (more on that later), we can probably say that there is no clear winner here.
 
-### 3) Opaque Naming - ✔️ `interface` wins (but it is debatable)
-
-- `interface` creates a concrete, unique, named type.
-- `type` creates a type alias, which means that TypeScript sometimes forgets the name and just refers to the type as its anonymous object shape.
-- In general, the ecosystem seems to agree that opaque naming is superior, but we discuss that later on in more detail.
-
-### 4) Unions - ❌ `type` wins
+### 3) Unions - ❌ `type` wins
 
 - `interface` is for declaring the shape of objects.
 - `type` is for computing types based on other information.
 - It is idiomatic in TypeScript to represent an object as a [discriminated union](https://basarat.gitbook.io/typescript/type-system/discriminated-unions). Thus, if you have a type that is a composition of other types, you cannot use `interface` and must use `type`.
 
-### 5) Primitives - ❌ `type` wins
+### 4) Primitives - ❌ `type` wins
 
 - If you want to create a type that is based off of a primitive type (like `number`), then you cannot use `interface` and must use `type`.
 - This kind of thing is common when branding primitives for better type-safety. For example:
@@ -318,6 +314,14 @@ So which should you use? Which is better? First, let's go over the differences.
 ```ts
 export type UserID = number & { readonly __userIDBrand: unique symbol };
 ```
+
+### 5) Opaque Naming - Nobody wins
+
+- `interface` creates a concrete, named type.
+- `type` creates a type alias.
+- Historically, `type` was bugged such that TypeScript would sometimes forget the name and just refer to the type as its anonymous object shape. However, in 2024, these bugs have been fixed. I am not aware of any current situations in which `type` will "bleed through" like it used to. (If you are, please submit a pull request!)
+- Opaque naming is extremely useful in order to not be blasted with information when inspecting complex types. But since both `interface` and `type` should always result in a named type, then this historic win for `interface` no longer applies.
+  - If a type uses [`Expand`](https://stackoverflow.com/a/57683652/1062714), it can still bleed through, but such a thing would be done intentionally.
 
 ### 6) Performance - Nobody wins
 
@@ -338,7 +342,7 @@ Now that we have a firm grasp of the concrete differences between `interface` an
 
 This argument has some merit, but it does not strike me as being very convincing:
 
-- `extends` in particular is an extremely useful feature; many codebases will have interfaces that use `extends`.
+- `extends` in particular is an extremely useful feature for its flattening functionality. Many codebases will have interfaces that use `extends`.
 - Thus, even though we are trying to purge `interface` from our codebase, we might end up having a mix of both `type` and `interface` anyway.
 
 ### Argument: Use `type` Because Accidental Declaration Merging Sucks
@@ -372,83 +376,19 @@ declare module "my-library" {
 
 ### Argument: Use `type` Because `interface` Can Explicitly Denote Declaration Merging
 
-- First, see the argument in the previous section.
+- First, see the argument in the previous section, which is similar.
 - Some library authors write interfaces that are intended to be declaration merged by the consumers. These special interfaces are usually denoted with a JSDoc comment.
-- But if a library exports some interfaces that should be declaration merged and some that should not, that's confusing. Why are we delineating them with a JSDoc comment if we could instead delineate them with official TypeScript keywords? The obvious advantage of the latter is that the immutability is enforced by the language itself!
+- But if a library exports some interfaces that should be declaration merged and some that should not, that's confusing. Why are we delineating them with a JSDoc comment if we could instead delineate them with official TypeScript keywords? The obvious advantage of the latter is that the immutability would be enforced by the language itself!
 - This pattern makes a lot of sense. But notice that the base assumption here is that "sometimes, we want to declaration merge, and other times we don't". Is that assumption true?
-- In libraries that are natively written in TypeScript, there is probably no need for the consumers to use declaration merging at all. It is safer and more understandable for consumers if the mutation is passed to the library explicitly - either as either the input to a function or the input to a generic type. Then, the modified type is passed back to the consumer as an output.
+- In libraries that are natively written in TypeScript, there is probably no need for the consumers to use declaration merging at all. It is safer and more understandable for consumers if the mutation is passed to the library explicitly - either as either the input to a function or the input to a generic type. Then, the modified type can be passed back to the consumer as an output.
 - In conclusion, in a world where we ignore that declaration merging exists, we don't need to use `interface` to explicitly denote it.
-
-### Argument: Use `interface` Because Names Are Awesome
-
-- In general, we want our types to be named, since it provides a better developer experience. For example, consider the following code that uses the [Zod validator library](https://zod.dev/):
-
-```ts
-import { z } from "zod";
-
-const user = z.object({
-  userID: z.number(),
-  username: z.string(),
-  counters: z.number(),
-})
-
-type User = z.infer<typeof user>;
-
-function getUser(): User | undefined {
-  // TODO
-}
-
-const someUser = getUser();
-```
-
-- When we mouse over `someUser` to examine the type, we see the following type:
-
-```ts
-{
-    userID: number;
-    username: string;
-    counters: number;
-} | undefined
-```
- 
-- This is quite verbose and hard to parse. Even though we manually specified the return type of the `getUser` function to be `User | undefined`, TypeScript still spits out the uglified type back at us. What we really want is the mouseover to show `User | undefined`.
-- This can be accomplished by using an interface, since an interface is always a named type:
-
-```ts
-- type User = z.infer<typeof user>;
-+ interface User extends z.infer<typeof user> {}
-```
-
-- So in general, we want to prefer `interface` over `type` since it provides named types in all circumstances!
-- In fact, this is the reason that the TypeScript ecosystem as a whole has converged on `interface` over `type` (more on that later). Let's do a quick history lesson. Consider the following code:
-
-```ts
-interface InterfaceUser {
-    userID: number;
-    username: string;
-    counters: number;
-}
-
-declare const interfaceUser: InterfaceUser;
-
-type TypeUser = {
-    userID: number;
-    username: string;
-    counters: number;
-}
-
-declare const typeUser: TypeUser;
-```
-
-- In this example, mousing over `interfaceUser` would always show the type correctly as `InterfaceUser`. But historically, mousing over the `typeUser` variable would not work properly! (It used to show the uglified type.) But in 2024, both of these now display correctly, because TypeScript has made improvements to `type`. But as we saw from the Zod example earlier on in this section, `type` does not _always_ work properly. So even though `type` has been improved, it still is not on par with interfaces.
 
 ### Argument: Use `interface` Because The Ecosystem Has Already Chosen `interface`
 
-- We previously explored some practical reasons why one would want to prefer `interface` over `type` or vice versa. I think the practical arguments sway more towards using `interface`. But to be completely honest, the practical reasons are not super powerful for one side or the other.
-- For this reason, whether to choose `interface` or `type` might mostly just come down to a matter of style. But when choosing the style for your TypeScript code, it makes a lot of sense to use the conventions that already prevail in the ecosystem. The idea is that we want our TypeScript code to look like everyone else's TypeScript code, since it makes it much easier for other people to read and understand. A great man once said that [code is read more often than it is written](https://skeptics.stackexchange.com/questions/48560/is-code-read-more-often-than-its-written).
+- We previously explored some practical reasons why one would want to prefer `interface` over `type` or vice versa. I think the practical arguments point slightly towards using `type`. But to be honest, the practical reasons are not super powerful for one side or the other.
+- For this reason, whether to choose `interface` or `type` might mostly just come down to a matter of style. But when choosing the style for your TypeScript code, it makes a lot of sense to use the conventions that already prevail in the ecosystem. The idea is that we want our TypeScript code to look like everyone else's TypeScript code, since it makes it much easier for other people to read and understand. (You have probably heard that [code is read more often than it is written](https://skeptics.stackexchange.com/questions/48560/is-code-read-more-often-than-its-written).)
 - So what is the prevailing style in the ecosystem? The answer is `interface`. As mentioned in the previous section, this is mostly a historical artifact of `type` having some buggy behavior.
 - This convention is codified inside of the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) ESLint rule. The rule ensures a consistent style for type definitions throughout a codebase, and the default option is `interface`.
-  - If you are not already using most of the rules in `typescript-eslint`, you definately should! The aforementioned rule is contained within the [`stylistic`](https://typescript-eslint.io/linting/configs/#stylistic) config, so that is the easiest way to turn it on. Alternatively, the rule is also included in the comprehensive [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript).
 
 ## Conclusion
 
