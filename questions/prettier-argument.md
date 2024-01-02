@@ -9,7 +9,7 @@ The answer lies in autoformatters. After using [Prettier](https://prettier.io/) 
 - "I am now used to the way everything looks. And the fact that everything reorganizes itself into this style automatically saves me _so much time_. As I code, I constantly save the file to summon the autoformatter, which makes me able to code twice as fast as I used to."
 - "The entire codebase is much easier to read now, because everything has a consistent style."
 
-But the mind-bending part happens once you start working in and looking at other codebases.
+But the mind-bending part happens once you start working in other codebases.
 
 - "The new project that I am working on uses the same formatting tool. I immediately feel at home, because all of the code looks identical to the last project."
 - "Even though the projects were written by different people, it all looks like it was written by one person, which is great."
