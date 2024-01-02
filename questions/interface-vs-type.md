@@ -131,4 +131,4 @@ declare module "my-library" {
 - Subsequently, the debate mostly centers around which one to use for the "default" case of a basic object.
 - `type` has some small practical advantages over `interface`, but they matter much less in "modern" code (where we can ignore that declaration merging exists).
 - This means that whether to use `interface` or `type` for the default case is mostly a matter of style, in the same way that using tabs versus spaces is mostly a matter of style.
-- For the [same reason that would you want to use Prettier](https://prettier.io/docs/en/option-philosophy) to decide the debate between tabs versus spaces, it makes sense to follow the existing ecosystem convention of preferring `interface`.
+- For the [same reason that would you want to use Prettier](./prettier-argument.md) to decide the debate between tabs versus spaces, it makes sense to follow the existing ecosystem convention of preferring `interface`.
