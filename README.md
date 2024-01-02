@@ -290,7 +290,7 @@ So which should you use? Which is better? First, let's go over the differences.
 - However, using `&` to create an intersection is not exactly the same as extends:
   - `extends` can only be done with an object type or intersection of object types with statically known members, while intersecting does not have any restrictions.
   - But using `extends` creates a flat type. Daniel Rosenwasser goes over why this is important [in the official TypeScript wiki](https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections).
-  - Besides having worse performance, the other big problem with intersection types is that they are very ugly on mouseover. (i.e. `type Foo = { arg1: string } & { arg2: string}` instead of `interface Foo { arg1: string, arg2: string }`)
+  - Besides having worse performance, the other problem with intersection types is that they harder to read on mouseover. (i.e. `type Foo = { arg1: string } & { arg2: string}` instead of `interface Foo { arg1: string, arg2: string }`)
   - Another problem is that using `extends` will actually raise a compiler error when the types to not match. Whereas an intersection will just reduce to `never` (which may or may not produce a downstream error!).
 - Thus, you should never deliberately use an intersection type over `extends` (unless using `extends` is impossible).
 
