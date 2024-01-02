@@ -279,9 +279,46 @@ type Foo = {
 };
 ```
 
-So which should you use? Which is better?
+So which should you use? Which is better? First, let's go over the differences.
 
-Some YouTubers such as Matt Pocock have [a compelling argument for using types over interfaces](<https://www.youtube.com/watch?v=zM9UPcIyyhQ>). On the other hand, `interface` is the default option in the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule, which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the ESLint rule (which means using interfaces over types).
+## 1) `extends` - ✔️ `interface` wins
+
+- `interface` can use `extends`, which allows you to easily create types without repeating yourself. (i.e. `interface B extends A {}`)
+- `type` cannot use `extends`, but it can use `&` to intersect, which is similar. (i.e. `type B = {} & A`)
+- However, using `&` to create an intersection is not exactly the same as extends. (`extends` can only be done with an object type or intersection of object types with statically known members, while intersecting does not have any restrictions.)
+- The main problem though is that using an intersection results in uglier types when mousing over the type. (i.e. `type Foo = { arg1: string } & { arg2: string}` instead of `interface Foo { arg1: string, arg2: string }`)
+
+## 2) `implements` - ✔️ `interface` wins
+
+- `interface` can be implemented using `implements` on a class. (i.e. `class B implements A {}`)
+- `type` cannot do this.
+
+## 3) Declaration Merging - ✔️ `interface` wins
+
+- `interface` can use declaration merging, which allows you to add new fields to an existing declared interface. For example, this is useful for augmenting `globals.Window`.
+- `type` can not be declaration merged.
+- Since this is a feature that `interface` has and `type` does not, you might be tempted to immediately mark this as a win for `interface` and move on to the next section. But not so fast.
+- Some people argue that [declaration merging is dangerous](https://www.youtube.com/watch?v=zM9UPcIyyhQ) in a similar way to having global variables in your program is dangerous. Thus, declaration merging is an anti-feature, and having it exist actually makes `interfaces` bad. The arguement goes that because declaration merging exists, you should try to use `type` over `interface` whenever possible so that you can avoid shooting yourself in the foot.
+- But how much of a footgun is declaration merging really? Here's where things get tricky. In order to be more specific, we should break up declaration merging into two cases:
+  - **Declaration merging in the global or module scope** - This is when you are augmenting an interface that was originally created with `declare interface`. This is primarily done for JavaScript libraries that are not written in TypeScript and therefore do not offer first-class TypeScript types. For example, this is done [in the `fastify-secure-session` plugin](https://github.com/fastify/fastify-secure-session?tab=readme-ov-file#add-typescript-types).
+  - **Declaration merging using explicit ESM imports** - This is when you are augmenting an interface that was originally created with `export interface`. This is primarily done for libraries that are written in TypeScript. This is because interfaces can easily be offered alongside functions and constants as first-class citizens.
+- The "global variable" concern that people have with `interface` primarily has to do with the former case. And indeed, it is pretty bad: if an interface was declared within a `declare global` block, now there is a namespace conflict such that you can accidentally declaration merge without knowing it simply by choosing an overlapping name. And furthermore, it can be extremely difficult to find all the places in a codebase that augmenting a `declare interface`, because we cannot rely on things like the "Find all References" feature of VSCode.
+- However, the "global variable" concern does not really apply to the latter (ESM) case. Once we are explicitly importing and exporting our interfaces, TypeScript prevents us from accidentally declaration merging with the error "Import declaration conflicts with local declaration".
+- With this in mind, the real question becomes: how many non-ESM interfaces are present in my TypeScript envirornment? If the number is low, then `interface` unambiguously wins over `type` again. And in a modern application that is completely written in TypeScript (and with other dependencies written in TypeScript), the number might be 0.
+
+## 4) Opaque Naming - ✔️ `interface` wins
+
+- zod
+
+## no type alias
+
+## no primitive brand
+
+## use type for everything
+
+## 5) Ecosystem Conventions - ✔️ `interface` wins
+
+On the other hand, `interface` is the default option in the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule, which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the ESLint rule (which means using interfaces over types).
 
 For reference, the rule is automatically enabled as long as you inherit from the [`stylistic`](https://typescript-eslint.io/linting/configs/#stylistic) config from `typescript-eslint`. Alternatively, it is also automatically enabled if you use [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript).
 
