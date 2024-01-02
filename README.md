@@ -283,12 +283,13 @@ So which should you use? Which is better? First, let's go over the differences.
 
 ## The Differences Between `interface` and `type`
 
-### 1) `extends` - ✔️ `interface` wins
+### 1) `extends` - ✔️ `interface` mostly wins
 
 - `interface` can use `extends`, which allows you to create types without repeating yourself. (i.e. `interface B extends A {}`)
 - `type` cannot use `extends`, but it can use `&` to intersect, which is similar. (i.e. `type B = {} & A`)
 - However, using `&` to create an intersection is not exactly the same as extends. [According to Daniel Rosenwasser](https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections) (the TypeScript program manager): "Interfaces create a single flat object type that detects property conflicts, which are usually important to resolve! Intersections on the other hand just recursively merge properties, and in some cases produce never."
 - In other words, interfaces always produce a TypeScript compiler error, which is good. But intersection types may or may not produce a downstream error, which is bad!
+  - Of course, there are some edge-cases when we deliberately want to create a `never` type, or when [using `interface` is awkward](https://www.typescriptlang.org/play?#code/C4TwDgpgBAggjFAvFA3gWAFBW1MAnAezAC5UoBDUgZ2DwEsA7AcygF9N2NNRIoAhBMnhQAZKkw5chEmQBGpBgFcAtrIh42HTJgAmEAMYAbcnmj6CDGlFlxSAzLIB0+ItoyNg6gGbl90GABM4lg4LjIoFNS0jCycnJge3r7QfEEQAB6eDDpUsEHoIdhhpIEA2gDkYeUAuqJyCipqGnFuekYmZhZW8vwBDs7SmEA). So we can't use `extends` in _every_ situation. But in the general case, it is probably better to have more robust error handling.
 - Other concerns about `extends` vs intersection types generalize to the greater discussion of `interface` vs `type`, so we also need to take the other differences below into account.
 
 ### 2) Declaration Merging - ✔️ `interface` wins
