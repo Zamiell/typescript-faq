@@ -28,7 +28,7 @@ Even in a world where we use JSDoc types instead of TypeScript, we probably need
 
 First, we want to convert modern JavaScript to legacy JavaScript for maximum backwards compatibility. Modern JavaScript keeps getting [new features](https://en.wikipedia.org/wiki/ECMAScript_version_history) every year that we probably want to use, like the `class` keyword (from 2015) or the `Array.toSorted` method (from 2023). So, if we are writing a web-application, we probably want to support older browsers. The TypeScript compiler can take care of this automatically, but if we were not using TypeScript, then we would have to use a separate build tool like [Babel](https://babeljs.io/).
 
-Second, if we are serving JavaScript over the web, then we generally want to [minify](https://en.wikipedia.org/wiki/Minification_(programming)) the code. This can reduce the size of the bundle by a lot, making the website feel a lot snappier in places of the world with slower internet. In other words, removing TypeScript to "get rid of the build step" is not really a win when we need to run the JavaScript code through [Terser](https://terser.org/) anyway.
+Second, if we are serving JavaScript over the web, then we generally want to [minify](<https://en.wikipedia.org/wiki/Minification_(programming)>) the code. This can reduce the size of the bundle by a lot, making the website feel a lot snappier in places of the world with slower internet. In other words, removing TypeScript to "get rid of the build step" is not really a win when we need to run the JavaScript code through [Terser](https://terser.org/) anyway.
 
 Third, if we are developing a library, then we need to provide TypeScript declaration files (".d.ts" files) for end-users so that they can have a good developer experience. If the library is natively written in TypeScript, then these files are automatically created (as long as the [`declaration`](https://www.typescriptlang.org/tsconfig#declaration) compiler option is set). And if our library is written in JavaScript with JSDoc type-annotations, we can also automatically create these files by pointing the TypeScript compiler at our JavaScript code. But the point is that if we have to run the TypeScript compiler in either case before we publish our code, we are not really gaining much by "skipping" the build step.
 
@@ -82,7 +82,7 @@ Would be equivalent to:
 function foo(arg1, arg2) {}
 ```
 
-Additionally, you can convert most TypeScript `interface` and `type` to JSDoc using  `@typedef`. For example:
+Additionally, you can convert most TypeScript `interface` and `type` to JSDoc using `@typedef`. For example:
 
 ```ts
 interface Foo {

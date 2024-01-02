@@ -79,17 +79,17 @@ Both `tsx` and `ts-node` are programs that allow you to run TypeScript files dir
   // Automatically run the formatter when certain files are saved.
   "[javascript][typescript][javascriptreact][typescriptreact]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
+      "source.fixAll.eslint": "explicit"
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
-    "editor.tabSize": 2,
+    "editor.tabSize": 2
   },
   "[css][json][jsonc][html][markdown][postcss][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
-    "editor.tabSize": 2,
-  },
+    "editor.tabSize": 2
+  }
 }
 ```
 

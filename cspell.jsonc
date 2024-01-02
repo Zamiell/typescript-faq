@@ -19,9 +19,11 @@
     "Deno",
     "esbenp",
     "footgun",
+    "gofmt",
     "isaacscript",
     "Pocock",
     "Rosenwasser",
+    "rustfmt",
     "tldr",
     "Zacher"
   ]
