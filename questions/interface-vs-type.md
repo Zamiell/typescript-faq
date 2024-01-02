@@ -54,7 +54,7 @@ export type UserID = number & { readonly __userIDBrand: unique symbol };
 
 - Historically, `type` was bugged such that TypeScript would sometimes forget the name and just refer to the type as its anonymous object shape. However, in 2024, these bugs have been fixed. I am not aware of any current situations in which `type` will "bleed through" like it used to. (If you are, please submit a pull request!)
 - Opaque naming is extremely useful in order to not be blasted with information when inspecting complex types. But since both `interface` and `type` should always result in a named type, then this historic win for `interface` no longer applies.
-  - If a type uses [`Expand`](https://stackoverflow.com/a/57683652/1062714), it can still bleed through, but such a thing would be done intentionally.
+  - If a type uses [`Expand`](https://stackoverflow.com/a/57683652/1062714), it can still bleed through, but such a thing would be done intentionally (like in [Zod](https://github.com/colinhacks/zod) schemas).
 
 ### 6) Performance - Nobody wins
 
