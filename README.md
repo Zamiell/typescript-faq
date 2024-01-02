@@ -291,6 +291,8 @@ So which should you use? Which is better? First, let's go over the differences.
   - `extends` can only be done with an object type or intersection of object types with statically known members, while intersecting does not have any restrictions.
   - But using `extends` creates a flat type. Daniel Rosenwasser goes over why this is important [in the official TypeScript wiki](https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections).
   - Besides having worse performance, the other big problem with intersection types is that they are very ugly on mouseover. (i.e. `type Foo = { arg1: string } & { arg2: string}` instead of `interface Foo { arg1: string, arg2: string }`)
+  - Another problem is that using `extends` will actually raise a compiler error when the types to not match. Whereas an intersection will just reduce to `never` (which may or may not produce a downstream error!).
+- Thus, you should never deliberately use an intersection type over `extends` (unless using `extends` is impossible).
 
 ### 2) `implements` - ✔️ `interface` wins
 
@@ -422,14 +424,17 @@ declare const typeUser: TypeUser;
 ### Argument: Use `interface` Because The Ecosystem Has Already Chosen `interface`
 
 - We previously explored some practical reasons why one would want to prefer `interface` over `type` or vice versa. I think the practical arguments sway more towards using `interface`. But to be completely honest, the practical reasons are not super powerful for one side or the other.
-- For this reason, whether to choose `interface` or `type` might mostly just come down to a matter of style. But when choosing the style for your TypeScript code, it makes a lot of sense to use the conventions that already prevail in the ecosystem. The idea is that we want our TypeScript code to look like everyone else's TypeScript code; this makes it much easier for other people to read and understand. A great man once said that [code is read more often than it is written](https://skeptics.stackexchange.com/questions/48560/is-code-read-more-often-than-its-written).
-- So what is the prevailing style in the ecosystem? The answer is `interface`. As mentioned in the previous section, this is mostly a historical reason due to 
-- It is extremely common for TypeScript codebases to use [ESLint](https://eslint.org/) along with [`typescript-eslint`](https://typescript-eslint.io/) as an additional safety measure on top of the safety that the TypeScript compiler itself provides. `typescript-eslint` comes with pre-defined configs, including the [`stylistic`](https://typescript-eslint.io/linting/configs#stylistic) config, which contains the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule.
+- For this reason, whether to choose `interface` or `type` might mostly just come down to a matter of style. But when choosing the style for your TypeScript code, it makes a lot of sense to use the conventions that already prevail in the ecosystem. The idea is that we want our TypeScript code to look like everyone else's TypeScript code, since it makes it much easier for other people to read and understand. A great man once said that [code is read more often than it is written](https://skeptics.stackexchange.com/questions/48560/is-code-read-more-often-than-its-written).
+- So what is the prevailing style in the ecosystem? The answer is `interface`. As mentioned in the previous section, this is mostly a historical artifact of `type` having some buggy behavior.
+- This convention is codified inside of the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) ESLint rule. The rule ensures a consistent style for type definitions throughout a codebase, and the default option is `interface`.
+  - If you are not already using most of the rules in `typescript-eslint`, you definately should! The aforementioned rule is contained within the [`stylistic`](https://typescript-eslint.io/linting/configs/#stylistic) config, so that is the easiest way to turn it on. Alternatively, the rule is also included in the comprehensive [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript).
 
-## 5) Ecosystem Conventions - ✔️ `interface` wins
+## Conclusion
 
-On the other hand, `interface` is the default option in the , which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the ESLint rule (which means using interfaces over types).
-
-For reference, the rule is automatically enabled as long as you inherit from the [`stylistic`](https://typescript-eslint.io/linting/configs/#stylistic) config from `typescript-eslint`. Alternatively, it is also automatically enabled if you use [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript).
+- You will have to use both `interface` and `type` no matter what.
+- When you have a choice, you should use `interface` for practical reasons:
+  - You don't have to be scared of declaration merging in most cases.
+  - The unambiguous names provide a better development experience.
+- If you care about following ecosystem standards and conventions, then using `interface` is a no-brainer.
 
 <br>
