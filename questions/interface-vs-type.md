@@ -124,7 +124,9 @@ declare module "my-library" {
 
 ## Conclusion
 
-- `interface` and `type` have subtle differences. Sometimes, choosing one over the other will make more sense. This could be that one of them is more semantically appropriate (so that people reading the code can more easily understand the type). Or it could be that one has a specific feature that you need.
+- `interface` and `type` have subtle differences. Sometimes, choosing one over the other will make more sense:
+  - It could be that one of them is more semantically appropriate.
+  - Or it could be that one of them has a specific feature that you need.
 - Thus, in many codebases, we will have a mix of both `interface` and `type`, and it is impossible and/or not practical to remove one or the other entirely.
 - Subsequently, the debate mostly centers around which one to use for the "default" case of a basic object.
 - `type` has some small practical advantages over `interface`, but they matter much less in "modern" code (where we can ignore that declaration merging exists).
