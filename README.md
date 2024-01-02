@@ -287,8 +287,10 @@ So which should you use? Which is better? First, let's go over the differences.
 
 - `interface` can use `extends`, which allows you to easily create types without repeating yourself. (i.e. `interface B extends A {}`)
 - `type` cannot use `extends`, but it can use `&` to intersect, which is similar. (i.e. `type B = {} & A`)
-- However, using `&` to create an intersection is not exactly the same as extends. (`extends` can only be done with an object type or intersection of object types with statically known members, while intersecting does not have any restrictions.)
-- The main problem though is that using an intersection results in uglier types when mousing over the type. (i.e. `type Foo = { arg1: string } & { arg2: string}` instead of `interface Foo { arg1: string, arg2: string }`)
+- However, using `&` to create an intersection is not exactly the same as extends:
+  - `extends` can only be done with an object type or intersection of object types with statically known members, while intersecting does not have any restrictions.
+  - But using `extends` creates a flat type. Daniel Rosenwasser goes over why this is important [in the official TypeScript wiki](https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections).
+  - Besides having worse performance, the other big problem with intersection types is that they are very ugly on mouseover. (i.e. `type Foo = { arg1: string } & { arg2: string}` instead of `interface Foo { arg1: string, arg2: string }`)
 
 ### 2) `implements` - ✔️ `interface` wins
 
@@ -321,6 +323,10 @@ So which should you use? Which is better? First, let's go over the differences.
 export type UserID = number & { readonly __userIDBrand: unique symbol };
 ```
 
+### 7) Performance - Nobody wins
+
+- [Matt Pocock](https://www.youtube.com/@mattpocockuk) mentions that [the TypeScript team says that there should be no performance difference between the two](https://www.youtube.com/watch?v=zM9UPcIyyhQ). (He does not show any receipts for the claim, but it appears plausible.)
+
 ## Arguments
 
 Now that we have a firm grasp of the concrete differences between `interface` and `type`, we can start to look at the arguments for using one over the other.
@@ -346,23 +352,13 @@ This argument has some merit, but it does not strike me as being very convincing
 - But how much of a footgun is declaration merging really? Here's where things get tricky. In order to be more specific, we should break up declaration merging into two cases:
   - **Declaration merging in the global or module scope** - This is when you are augmenting an interface that was originally created with `declare interface`. This is primarily done for JavaScript libraries that are not written in TypeScript and therefore do not offer first-class TypeScript types. For example, this is done [in the `fastify-secure-session` plugin](https://github.com/fastify/fastify-secure-session?tab=readme-ov-file#add-typescript-types).
   - **Declaration merging using explicit ESM imports** - This is when you are augmenting an interface that was originally created with `export interface`. This is primarily done for libraries that are written in TypeScript. This is because interfaces can easily be offered alongside functions and constants as first-class citizens.
-- The "global variable" concern that people have with `interface` primarily has to do with the former case. And indeed, it is pretty bad: if an interface was declared within a `declare global` block, now there is a namespace conflict such that you can accidentally declaration merge without knowing it simply by choosing an overlapping name. And furthermore, it can be extremely difficult to find all the places in a codebase that augmenting a `declare interface`, because we cannot rely on things like the "Find all References" feature of VSCode.
-- However, the "global variable" concern does not really apply to the latter (ESM) case. Once we are explicitly importing and exporting our interfaces, TypeScript prevents us from accidentally declaration merging with the error "Import declaration conflicts with local declaration". Interestingly, you can [still actually augment the interface](https://stackoverflow.com/questions/36666915/how-can-i-augment-a-typescript-interface-using-a-type-exported-from-another-d-t), but this would be virtually impossible to do accidentally.
-- With this in mind, the real question becomes: how many non-ESM interfaces are present in your TypeScript envirornment? If the number is low, then `interface` unambiguously wins over `type` again. And in a modern application that is completely written in TypeScript (and with other dependencies written in TypeScript), the number might be 0.
+- The "global variable" concern that people have with `interface` primarily has to do with the former case. And indeed, it is pretty bad: if an interface was declared within a `declare global` block, now there is a namespace conflict such that you can accidentally declaration merge without knowing it simply by choosing an overlapping name. And furthermore, it can be extremely difficult to find all the places in a codebase that augment a `declare interface`, because we cannot rely on things like the "Find all References" feature of VSCode.
+- However, the "global variable" concern does not really apply to the latter (ESM) case. Once we are explicitly importing and exporting our interfaces, TypeScript prevents us from declaration merging with the error "Import declaration conflicts with local declaration". Interestingly, you can [still actually augment the interface](https://stackoverflow.com/questions/36666915/how-can-i-augment-a-typescript-interface-using-a-type-exported-from-another-d-t), but this would be virtually impossible to do accidentally.
+- With this in mind, the real question becomes: how many non-ESM interfaces are present in your TypeScript envirornment? If the number is low, then `interface` unambiguously wins over `type`, since we do not have to worry about the footgun. And in a modern application that is completely written in TypeScript (and with other dependencies written in TypeScript), the number might be 0.
 
+### Argument: Use `interface` Because Names Are Awesome
 
-
-
-
-
-
-
-
-
-
-
-
-- In general, we want our types to be named, since it provides a better developer experience. For example, consider the following code, using the [Zod validator library](https://zod.dev/):
+- In general, we want our types to be named, since it provides a better developer experience. For example, consider the following code that uses the [Zod validator library](https://zod.dev/):
 
 ```ts
 import { z } from "zod";
@@ -384,7 +380,7 @@ const someUser = getUser();
 
 - When we mouse over `someUser` to examine the type, we see the following type:
 
-```
+```ts
 {
     userID: number;
     username: string;
@@ -400,18 +396,39 @@ const someUser = getUser();
 + interface User extends z.infer<typeof user> {}
 ```
 
-- So in general, we want to prefer `interface` over `type` since it provides named types in all circumstances.
+- So in general, we want to prefer `interface` over `type` since it provides named types in all circumstances!
+- In fact, this is the reason that the TypeScript ecosystem as a whole has converged on `interface` over `type` (more on that later). Let's do a quick history lesson. Consider the following code:
 
+```ts
+interface InterfaceUser {
+    userID: number;
+    username: string;
+    counters: number;
+}
 
+declare const interfaceUser: InterfaceUser;
 
+type TypeUser = {
+    userID: number;
+    username: string;
+    counters: number;
+}
 
+declare const typeUser: TypeUser;
+```
 
+- In this example, mousing over `interfaceUser` would always show the type correctly as `InterfaceUser`. But historically, mousing over the `typeUser` variable would not work properly! (It used to show the uglified type.) But in 2024, both of these now display correctly, because TypeScript has made improvements to `type`. But as we saw from the Zod example earlier on in this section, `type` does not _always_ work properly. So even though `type` has been improved, it still is not on par with interfaces.
 
-## use type for everything
+### Argument: Use `interface` Because The Ecosystem Has Already Chosen `interface`
+
+- We previously explored some practical reasons why one would want to prefer `interface` over `type` or vice versa. I think the practical arguments sway more towards using `interface`. But to be completely honest, the practical reasons are not super powerful for one side or the other.
+- For this reason, whether to choose `interface` or `type` might mostly just come down to a matter of style. But when choosing the style for your TypeScript code, it makes a lot of sense to use the conventions that already prevail in the ecosystem. The idea is that we want our TypeScript code to look like everyone else's TypeScript code; this makes it much easier for other people to read and understand. A great man once said that [code is read more often than it is written](https://skeptics.stackexchange.com/questions/48560/is-code-read-more-often-than-its-written).
+- So what is the prevailing style in the ecosystem? The answer is `interface`. As mentioned in the previous section, this is mostly a historical reason due to 
+- It is extremely common for TypeScript codebases to use [ESLint](https://eslint.org/) along with [`typescript-eslint`](https://typescript-eslint.io/) as an additional safety measure on top of the safety that the TypeScript compiler itself provides. `typescript-eslint` comes with pre-defined configs, including the [`stylistic`](https://typescript-eslint.io/linting/configs#stylistic) config, which contains the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule.
 
 ## 5) Ecosystem Conventions - ✔️ `interface` wins
 
-On the other hand, `interface` is the default option in the [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions/) rule, which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the ESLint rule (which means using interfaces over types).
+On the other hand, `interface` is the default option in the , which represents the standards that the ecosystem has converged around. Thus, I generally recommend that people follow the default settings of the ESLint rule (which means using interfaces over types).
 
 For reference, the rule is automatically enabled as long as you inherit from the [`stylistic`](https://typescript-eslint.io/linting/configs/#stylistic) config from `typescript-eslint`. Alternatively, it is also automatically enabled if you use [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript).
 
