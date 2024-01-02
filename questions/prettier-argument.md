@@ -16,7 +16,7 @@ But the mind-bending part happens once you start working in other codebases.
 
 But the rabbit hole goes deeper.
 
-- "Blogs on the internet show code that also uses the same formatting tool. It is now effortless to read other random people's code."
+- "Blogs on the internet that show code that also use the same formatting tool. It is now effortless to read other random people's code."
 - "Most code on StackOverflow also uses the same formatting tool. I can copy paste other people's code into my own codebase without having to change anything!"
 - "I have become so used to this that it actually becomes annoying when I see code that is not formatted by the tool. It would be great if the _entire_ ecosystem would agree on the style from this tool!"
 
