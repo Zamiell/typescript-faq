@@ -283,7 +283,7 @@ So which should you use? Which is better? First, let's go over the differences.
 
 ## The Differences Between `interface` and `type`
 
-### 1) `extends` - ✔️ `interface` mostly wins
+### 1) `extends` - ✔️ `interface` wins (but it is debatable)
 
 - `interface` can use `extends`, which allows you to create types without repeating yourself. (i.e. `interface B extends A {}`)
 - `type` cannot use `extends`, but it can use `&` to intersect, which is similar. (i.e. `type B = {} & A`)
@@ -292,17 +292,17 @@ So which should you use? Which is better? First, let's go over the differences.
   - Of course, there are some edge-cases when we deliberately want to create a `never` type, or when [using `interface` is awkward](https://www.typescriptlang.org/play?#code/C4TwDgpgBAggjFAvFA3gWAFBW1MAnAezAC5UoBDUgZ2DwEsA7AcygF9N2NNRIoAhBMnhQAZKkw5chEmQBGpBgFcAtrIh42HTJgAmEAMYAbcnmj6CDGlFlxSAzLIB0+ItoyNg6gGbl90GABM4lg4LjIoFNS0jCycnJge3r7QfEEQAB6eDDpUsEHoIdhhpIEA2gDkYeUAuqJyCipqGnFuekYmZhZW8vwBDs7SmEA). So we can't use `extends` in _every_ situation. But in the general case, it is probably better to have more robust error handling.
 - Other concerns about `extends` vs intersection types generalize to the greater discussion of `interface` vs `type`, so we also need to take the other differences below into account.
 
-### 2) Declaration Merging - ✔️ `interface` wins
+### 2) Declaration Merging - ✔️ `interface` wins (but it is debatable)
 
 - `interface` can use declaration merging, which allows you to add new fields to an existing declared interface. For example, this is useful for augmenting `globals.Window`.
 - `type` can not be declaration merged.
 - Some people argue that declaration merging is actually dangerous, which makes it an anti-feature and automatically makes `interface` lose. More on that later on though.
 
-### 3) Opaque Naming - ✔️ `interface` wins
+### 3) Opaque Naming - ✔️ `interface` wins (but it is debatable)
 
 - `interface` creates a concrete, unique, named type.
-- `type` creates a type alias, which means that TypeScript sometimes forgets the name and just referst o the type as its anonymous object shape.
-- We discuss the benefits of opaque naming later on in more detail.
+- `type` creates a type alias, which means that TypeScript sometimes forgets the name and just refers to the type as its anonymous object shape.
+- In general, the ecosystem seems to agree that opaque naming is superior, but we discuss that later on in more detail.
 
 ### 4) Unions - ❌ `type` wins
 
@@ -319,9 +319,9 @@ So which should you use? Which is better? First, let's go over the differences.
 export type UserID = number & { readonly __userIDBrand: unique symbol };
 ```
 
-### 7) Performance - Nobody wins
+### 6) Performance - Nobody wins
 
-- [Matt Pocock](https://www.youtube.com/@mattpocockuk) mentions that [the TypeScript team says that there should be no performance difference between the two](https://www.youtube.com/watch?v=zM9UPcIyyhQ). (He does not show any receipts for the claim, but it appears plausible.)
+- [Matt Pocock](https://www.youtube.com/@mattpocockuk) mentions that [the TypeScript team says that there should be no performance difference between the two as of 2023](https://www.youtube.com/watch?v=zM9UPcIyyhQ). (He does not show any receipts for the claim, but it appears plausible.)
 
 ## Arguments
 
@@ -333,25 +333,22 @@ Now that we have a firm grasp of the concrete differences between `interface` an
 
 - Most types can be represented by both `interface` and `type`.
 - However, overall, many more types can be represented by `type` than by `interface` (e.g. unions, primitives).
-- If we always use `type` for as much stuff as we can, then we can mostly purge `interface` from our codebase entirely (except in the special case where we need to use `extends` or `implements` or declaration merging).
-- Thus, by having almost everything be `type`, it is easier to read the casebase, because everything is consistently declared as a `type`.
+- If we always use `type` for as much stuff as we can, then we can mostly purge `interface` from our codebase entirely (except in the special case where we need to use `extends` or declaration merging).
+- Thus, by having almost everything be `type`, it is easier to read the codebase, because everything is consistently declared as a `type`.
 
 This argument has some merit, but it does not strike me as being very convincing:
 
 - `extends` in particular is an extremely useful feature; many codebases will have interfaces that use `extends`.
-- Thus, even though we are trying to purge `interface` from our codebase, we will usually end up having a mix of both `type` and `interface` anyway.
+- Thus, even though we are trying to purge `interface` from our codebase, we might end up having a mix of both `type` and `interface` anyway.
 
-### Argument: Use `type` Because Declaration Merging Sucks
+### Argument: Use `type` Because Accidental Declaration Merging Sucks
 
 - As mentioned above, declaration merging is a feature that `interface` has but `type` does not. Subsequently, you might be tempted to immediately mark this as a win for `interface`. But not so fast.
-- [Matt Pocock](https://www.youtube.com/@mattpocockuk) argues that [declaration merging is dangerous](https://www.youtube.com/watch?v=zM9UPcIyyhQ) in a similar way to having global variables in your program is dangerous. Thus, declaration merging is an anti-feature, and having it exist actually makes `interface` bad. Because declaration merging exists, you should try to use `type` over `interface` whenever possible so that you can avoid shooting yourself in the foot.
-
-#### Sub-argument 1: Accidental Usage
-
+- Some people argue that declaration merging is dangerous in a similar way to having global variables in your program is dangerous. Thus, declaration merging is an anti-feature, and having it exist actually makes `interface` bad. Because declaration merging exists, you should try to use `type` over `interface` whenever possible so that you can avoid shooting yourself in the foot.
 - But how much of a footgun is declaration merging really? It turns out that as long as you use ESM, all things are module scoped - meaning that there is no chance of accidental cross-file declaration merging from name clashes. When using ESM, [you cannot even accidentally merge with a global type](https://www.typescriptlang.org/play?#code/JYOwLgpgTgZghgYwgAgHIHsAmKDeBYAKGWQBt0E4SAFKdABwC5kBnMKUAcwG5CBfQwtgQk4UFAnQhWySKyYZsPArLAA6MhWq06SlaoCCAFUMAlAJIAhAKqGAogH1UAeQAitpYQgAPOuihhkHF4uZAB6UOQJAFsoiHAZAAtgZmR0AFcAuBBMRJQ4ACN0ADcUaFooZExkuDo6CFFmQiA)!
 - In other words, the footgun from declaration merging only really applies in very specific cases, like when writing `.d.ts` files with other interfaces in the global scope. This is not something that we need to do in modern applications that are written in TypeScript from the get-go.
 
-### Sub-argument 2: Types Should Be Constant
+### Argument: Use `type` Because Declaration Merging Allows Mutability
 
 - Most TypeScript programmers would agree that you should always use `const` instead of `let`, if possible. Programs are much easier to reason about without having to keep track of variable mutations. `let` is the root cause of many bugs!
 - This same concept applies to exported types. Even if an `interface` is properly exported, and both sides are using ESM, it is still possible for a consumer to mutate a library's type like this:
@@ -365,13 +362,22 @@ declare module "my-library" {
 ```
 
 - It is not possible to mutate an exported `type`. In other words, `interface` is like `let`, and `type` is like `const`.
-- So, if you writing a library, you might feel compelled to keep track of any `interface` that you export, in order to code defensively around the fact that some user might extend them. But that's extra work for not much other gain. So this is a pretty good reason to prefer `type` over `interface`!
+- So, if you writing a library, you might feel compelled to keep track of any `interface` that you export, in order to code defensively around the fact that some user might extend them. But that's extra work for not much other gain. So this is a pretty good reason to prefer `type` over `interface`! This is covered in [Matt Pocock's video on `type` versus `interface`]](https://www.youtube.com/watch?v=zM9UPcIyyhQ).
 - But let's step back for a moment. Just because it is _technically possible_ to mutate an existing `interface`, does not mean that it is something worth worrying about.
 - The previous analogy to `let` is a bit flawed in that it is trivial to mutate a `let` variable. But we have to deliberately go out of our way to declaration merge, such that it would be virtually impossible to do it by accident. In other words, the danger of immutability scales proportionally with how easy it is to mutate.
-- To illustrate this point, I think a good analogy is [the intended TypeScript escape hatch](https://github.com/microsoft/TypeScript/issues/19335) for accessing private fields. TypeScript rightly disallows accessing class fields marked as `private`, as you would expect. But the linked issue showcases that TypeScript actually allows access to private fields when you access them without the dot notation. This is very surprising for people who have not seen it before! But the escape hatch is very useful, as it allows classes to be better tested.
-- One could argue: "Since it is technically possible for people who consume your library's class to use the escape hatch to access your private variables, you should carefully code your class with safeguards that mitigate the damage they could do." One could go even farther: "You should not use `private` fields at all since they are technically unsafe". If you are like me, this probably strikes you as a weird argument: if someone is deliberately mutating your private variables, all bets are off and the warranty is void.
-- In other words, even though `private` variables are not technically private, we should treat them as such. And subsequently, even though `interface` is not technically constant, we should also treat them as such. Because when someone mutates private variables or mutates exported interfaces, they are breaking the implicit contract of the library, and it isn't our problem.
+- To illustrate this point, I think a good analogy is [the intended TypeScript escape hatch](https://github.com/microsoft/TypeScript/issues/19335) for accessing private fields. TypeScript rightly disallows accessing class fields marked as `private` from outside the class, as you would expect. But the linked issue showcases that TypeScript actually allows access to private fields when using index notation. This is very surprising for people who have not seen it before! (But the escape hatch is very useful, as it allows classes to be better tested.)
+- One could argue: "Since it is technically possible for people who consume your library's class to use the escape hatch to access your private variables, you should carefully code your class with safeguards that mitigate the damage they could do." One could go even farther: "You should not use `private` fields at all since they are technically unsafe". If you are like me, this probably strikes you as a weird argument: if someone is deliberately mutating your private variables, all bets are off and the warranty on the class is void.
+- In other words, even though `private` variables are not technically private, we should treat them as such. And subsequently, even though `interface` is not technically constant, we should also treat them as such. Because when someone mutates private variables or mutates exported interfaces, they are breaking the implicit contract of the library, and this should not be our problem.
 - The conlusion here is that `type` is unambiguously safer, but the safety does not matter that much, and the safety might not be more important than the other advantages that `interface` has.
+
+### Argument: Use `type` Because `interface` Can Explicitly Denote Declaration Merging
+
+- First, see the argument in the previous section.
+- Some library authors write interfaces that are intended to be declaration merged by the consumers. These special interfaces are usually denoted with a JSDoc comment.
+- But if a library exports some interfaces that should be declaration merged and some that should not, that's confusing. Why are we delineating them with a JSDoc comment if we could instead delineate them with official TypeScript keywords? The obvious advantage of the latter is that the immutability is enforced by the language itself!
+- This pattern makes a lot of sense. But notice that the base assumption here is that "sometimes, we want to declaration merge, and other times we don't". Is that assumption true?
+- In libraries that are natively written in TypeScript, there is probably no need for the consumers to use declaration merging at all. It is safer and more understandable for consumers if the mutation is passed to the library explicitly - either as either the input to a function or the input to a generic type. Then, the modified type is passed back to the consumer as an output.
+- In conclusion, in a world where we ignore that declaration merging exists, we don't need to use `interface` to explicitly denote it.
 
 ### Argument: Use `interface` Because Names Are Awesome
 
