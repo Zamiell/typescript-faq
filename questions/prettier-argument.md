@@ -20,9 +20,9 @@ But the rabbit hole goes deeper.
 - "Most code on StackOverflow also uses the same formatting tool. I can copy paste other people's code into my own codebase without having to change anything!"
 - "I have become so used to this that it actually becomes annoying when I see code that is not formatted by the tool. It would be great if the _entire_ ecosystem would agree on the style from this tool!"
 
-This was basically my experience with writing [Golang](https://go.dev/) and using `gofmt`, which is distributed as part of the language. Because it was part of the language itself, `gofmt` got immediate and widespread adoption. Even most random StackOverflow questions have "correct" formatting!
+This was basically my experience with writing [Go](https://go.dev/) and using `gofmt`, which is distributed as part of the language. Because it was part of the language itself, `gofmt` got immediate and widespread adoption. Even most random StackOverflow questions have "correct" formatting!
 
-Why isn't every programming language like Golang? I think that part of the problem is that when people try out a new language, they often use the same formatting and conventions that they used in their previous language. This fractures the ecosystem and makes everyone's code inconsistent and hard to read. The lesson of Go is that whenever you code in a new language, you should use the standard style that everyone else uses for that language. In this way, every language can have the superpower that Go has.
+Why isn't every programming language like Go? I think that part of the problem is that when people try out a new language, they often use the same formatting and conventions that they used in their previous language. This fractures the ecosystem and makes everyone's code inconsistent and hard to read. The lesson of Go is that whenever you code in a language, you should use the standard style that everyone else uses for that language. In this way, every language can have the superpower that Go has.
 
 Maybe your experience with Prettier wasn't quite as earth-shattering as mine was with `gofmt`. If not, that's okay. Hopefully you can at least see the value in an ecosystem converging around a basic style. Based on this philosophy, we might come up with the following axiom:
 
