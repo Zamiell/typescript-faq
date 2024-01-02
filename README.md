@@ -309,6 +309,7 @@ So which should you use? Which is better? First, let's go over the differences.
 
 - `interface` creates a concrete, unique, named type.
 - `type` creates a type alias, which means that TypeScript sometimes forgets the name and just referst o the type as its anonymous object shape.
+- We discuss the benefits of opaque naming later on in more detail.
 
 ### 5) Unions - ❌ `type` wins
 
