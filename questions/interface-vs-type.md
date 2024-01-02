@@ -70,7 +70,7 @@ Now that we have a firm grasp of the concrete differences between `interface` an
 
 - Most types can be represented by both `interface` and `type`.
 - However, overall, many more types can be represented by `type` than by `interface` (e.g. unions, primitives).
-- If we always use `type` for as much stuff as we can, then we can mostly purge `interface` from our codebase entirely (except in the special case where we need to use `extends` or declaration merging).
+- If we always use `type` for as much stuff as we can, then we can mostly purge `interface` from our codebase (except in the special case where we need to use `extends` or declaration merging).
 - Thus, by having almost everything be `type`, it is easier to read the codebase, because everything is consistently declared as a `type`.
 
 This argument has some merit, but it does not strike me as being very convincing:
