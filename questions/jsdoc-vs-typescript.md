@@ -129,11 +129,9 @@ The beauty of code is subjective, but JSDoc is undeniably more verbose than Type
 
 Making a codebase more verbose and harder to read is not a cost that should be easily shrugged off.
 
-## Con - Type-Aware Lint Rules Do Not Work
+## Con - Some Lint Rules Do Not Work
 
-The overall assumption hanging above this discussion is that types are good, because they help us catch bugs at write-time. But if our goal is to catch as many bugs as possible, we should also be running a linter on our code in addition to running the TypeScript type-checker. [ESLint](https://eslint.org/) is the best JavaScript/TypeScript linter in the world. So, we should be using ESLint along with a configuration that enables [as many good lint rules as possible](https://isaacscript.github.io/eslint-config-isaacscript), including [most of the rules from the `typescript-eslint` project](https://typescript-eslint.io/rules/).
-
-However, [around half of the rules](https://typescript-eslint.io/rules/) from the `typescript-eslint` project (and rules from other projects such as [`eslint-plugin-isaacscript`](https://github.com/IsaacScript/isaacscript/tree/main/packages/eslint-plugin-isaacscript)) use type information in order to work properly. And this "type information" is not currently extracted from JSDoc comments. Meaning that tons of ESLint rules that would catch bugs on a TypeScript codebase are not going to work with JavaScript JSDoc type annotations!
+Rules that rely on TypeScript-specific keywords will not work with their JSDoc counterparts, such as [`@typescript-eslint/explicit-member-accessibility`](https://typescript-eslint.io/rules/explicit-member-accessibility/) and [`@typescript-eslint/explicit-function-return-type`](https://typescript-eslint.io/rules/explicit-function-return-type/).
 
 Brad Zacher from the core team explains why this is:
 
@@ -145,18 +143,16 @@ Brad Zacher from the core team explains why this is:
 >
 > I fully get why people want this and I think there is a small portion of the ecosystem which would benefit - but the massive cost of building, maintaining, and running it makes it a non-starter. The cost just far outweighs the small benefit.
 
-That is a big coverage gap and is probably the biggest con to using JSDoc, especially for people who are used to having ESLint around as a helpful friend who always has their back.
-
 ## Conclusion
 
 - Pro - No Build Step
 - Neutral - Same Dependencies + Same Maintenance of Config Files
 - Con - Non-Perfect Type Support
 - Con - Your Code is Ugly
-- Con - Type-Aware Lint Rules Do Not Work
+- Con - Some Lint Rules Do Not Work
 
 For tiny projects (like one-off scripts), using JSDoc types makes a lot of sense. It satisfies the [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) (i.e. the 80-20 rule). For these kinds of projects, you probably do not need to run `tsc` as a type-checker in CI, and you probably do not need a full-blown ESLint setup.
 
-But as soon as your project grows larger than a single file, you should probably start to think about converting your code to TypeScript. Troubleshooting bugs is not fun: any time that you would spend troubleshooting bugs that would be automatically caught by ESLint has to be weighed against the upfront, one-time cost of setting up TypeScript + ESlint.
+But as soon as your project grows larger than a single file, you should probably start to think about converting your code to TypeScript.
 
 Part of the problem here is that setting up TypeScript + ESLint by hand can be time-intensive. One possible solution is to simply bootstrap all of your new projects, big or small, through a TypeScript + ESLint project bootstrapper such as [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app) or my personal tool [`isaacscript init-ts`](https://isaacscript.github.io/main/isaacscript-in-typescript).
