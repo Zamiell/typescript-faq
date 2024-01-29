@@ -113,3 +113,52 @@ See [this page](./questions/jsdoc-vs-typescript.md).
 See [this page](./questions/interface-vs-type.md).
 
 <br>
+
+## Should I use TypeScript enums?
+
+Many TypeScript programmers ]do like like using enums](https://www.youtube.com/watch?v=jjMbPt_H3RQ) for a variety of reasons:
+
+- Enums are not a native JavaScript feature and they are compiled to an object with an arbitrary format, which breaks the typical TypeScript contract of only "adding types".
+- Enums are both a type and a run-time container at the same time, which can be confusing.
+- Enum values are nominal/branded, which can be confusing (since TypeScript is normally structurally typed).
+- Number enums automatically generate a reverse mapping, while string enums do not, which is confusing.
+- The `const enum` variant can be confusing since it makes the behavior different from the other types of enums. There is [an entire section in the TypeScript docs](https://www.typescriptlang.org/docs/handbook/enums.html#const-enum-pitfalls) that goes over the pitfalls of `const enum`. (However, arguments against `const enum` do not necessarily apply to normal enums.)
+
+The anti-enum folk suggest that you use "normal" objects instead of enums, like this:
+
+```ts
+export type ObjectValues<T> = T[keyof T];
+
+export const FRUIT = {
+  Apple: "Apple",
+  Banana: "Banana",
+} as const;
+
+export type Fruit = ObjectValues<typeof FRUIT>;
+```
+
+This breaks up the enum into the run-time container (i.e. `FRUIT`) and the type (i.e. `Fruit`). However, there is a very dangerous downfall with this approach, which is that the values are no longer branded. In other words, we lose type-safety:
+
+```ts
+export type ObjectValues<T> = T[keyof T];
+
+const FOO = {
+  Value1: 1,
+} as const;
+
+export type Foo = ObjectValues<typeof FOO>;
+
+const BAR = {
+  Value1: 1,
+} as const;
+
+export type Bar = ObjectValues<typeof BAR>;
+
+function useFoo(foo: Foo) {}
+
+useFoo(Bar.Value1); // BUG! But the TypeScript compiler does not care.
+```
+
+There is also another major reason to use enums: code clarity. An object declaration can mean many different kind of things, but an `enum` declaration means exactly one thing. Thus, it is extremely clear what the original programmer intends and it is extremely clear what the code does. Enums are also usually very concise and easy to read.
+
+For these reasons, I recommend using TypeScript's official (string) enums over manually-built creations that duplicate the same functionality. I believe that the benefits outweigh the other potentially confusing functionality.
