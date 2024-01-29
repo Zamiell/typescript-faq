@@ -38,6 +38,7 @@ I have been heavily using [TypeScript](https://www.typescriptlang.org/) since 20
   ],
 ```
 
+- The actual TypeScript codebase itself also [agrees that the ESLint rule is better](https://github.com/microsoft/TypeScript/pull/57123).
 - If you don't want to manually enable individual ESLint rules one by one like this, you can use [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript), which is a sharable configuration for ESLint that you can use in any TypeScript project.
 
 <br>
