@@ -119,7 +119,7 @@ See [this page](./questions/interface-vs-type.md).
 Many TypeScript programmers [do like like using enums](https://www.youtube.com/watch?v=jjMbPt_H3RQ) for a variety of reasons:
 
 - Enums are not a native JavaScript feature and they are compiled to an object with an arbitrary format, which breaks the typical TypeScript contract of only "adding types".
-- Enums are both a type and a run-time container at the same time, which can be confusing.
+- Enums are both a type and a container at the same time, which can be confusing.
 - Enum values are nominal/branded, which can be confusing (since TypeScript is normally structurally typed).
 - Number enums automatically generate a reverse mapping, while string enums do not, which is confusing.
 - The `const enum` variant can be confusing since it makes the behavior different from the other types of enums. There is [an entire section in the TypeScript docs](https://www.typescriptlang.org/docs/handbook/enums.html#const-enum-pitfalls) that goes over the pitfalls of `const enum`. (However, arguments against `const enum` do not necessarily apply to normal enums.)
