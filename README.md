@@ -116,7 +116,7 @@ See [this page](./questions/interface-vs-type.md).
 
 ## Should I use TypeScript enums?
 
-Many TypeScript programmers ]do like like using enums](https://www.youtube.com/watch?v=jjMbPt_H3RQ) for a variety of reasons:
+Many TypeScript programmers [do like like using enums](https://www.youtube.com/watch?v=jjMbPt_H3RQ) for a variety of reasons:
 
 - Enums are not a native JavaScript feature and they are compiled to an object with an arbitrary format, which breaks the typical TypeScript contract of only "adding types".
 - Enums are both a type and a run-time container at the same time, which can be confusing.
