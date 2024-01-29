@@ -161,4 +161,4 @@ useFoo(Bar.Value1); // BUG! But the TypeScript compiler does not care.
 
 There is also another major reason to use enums: code clarity. An object declaration can mean many different kind of things, but an `enum` declaration means exactly one thing. Thus, it is extremely clear what the original programmer intends and it is extremely clear what the code does. Enums are also usually very concise and easy to read.
 
-For these reasons, I recommend using TypeScript's official (string) enums over manually-built creations that duplicate the same functionality. I believe that the benefits outweigh the other potentially confusing functionality.
+For these reasons, I recommend using TypeScript's official (string) enums over manually-built creations that duplicate the same functionality. I believe that the benefits outweigh the other potentially confusing functionality. But you should always make sure to use the [`@typescript-eslint/no-unsafe-enum-comparison`](https://typescript-eslint.io/rules/no-unsafe-enum-comparison/) lint rule, which makes working with them safe.
