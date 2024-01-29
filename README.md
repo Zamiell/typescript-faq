@@ -167,6 +167,6 @@ For these reasons, I recommend using TypeScript's official (string) enums over m
 
 ## Should I use number enums or string enums?
 
-In general, you should use string enums, but using number enums is okay too in certain situations. See [this explanation](https://github.com/IsaacScript/isaacscript/blob/main/packages/eslint-plugin-isaacscript/docs/rules/strict-enums.md#number-enums-vs-string-enums).
+In general, you should use string enums, but using number enums is okay in certain situations. See [this explanation](https://github.com/IsaacScript/isaacscript/blob/main/packages/eslint-plugin-isaacscript/docs/rules/strict-enums.md#number-enums-vs-string-enums).
 
 <br>
