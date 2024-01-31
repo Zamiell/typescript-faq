@@ -58,7 +58,7 @@ export type UserID = number & { readonly __userIDBrand: unique symbol };
 
 ### 6) Performance - Nobody wins
 
-- Brad Zacher from the `typescript-eslint` team explains:
+- [Brad Zacher](https://github.com/bradzacher) from the `typescript-eslint` team explains:
 
 > Interfaces can improve performance in a few cases.
 > The TLDR is that an interface always creates a unique, named type in TS - this means that every named reference to an interface reuses the same type object internally.
