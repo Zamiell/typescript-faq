@@ -58,7 +58,15 @@ export type UserID = number & { readonly __userIDBrand: unique symbol };
 
 ### 6) Performance - Nobody wins
 
-- [Matt Pocock](https://www.youtube.com/@mattpocockuk) mentions that [the TypeScript team says that there should be no performance difference between the two as of 2023](https://www.youtube.com/watch?v=zM9UPcIyyhQ). (He does not show any receipts for the claim, but it appears plausible.)
+- Brad Zacher from the `typescript-eslint` team explains:
+
+> Interfaces can improve performance in a few cases.
+> The TLDR is that an interface always creates a unique, named type in TS - this means that every named reference to an interface reuses the same type object internally.
+> However a type alias creates an anonymous object type - and there are some cases where TS will create a new type when referencing a type alias instead of reusing the existing one.
+> This is slower because if the type is identical then it passes a === check internally (fast!); but if it's not then TS has to do an assignability check (slow).
+> Additionally this causes .d.ts files to be bloated as TS emits a duplicate anonymous object type instead of an identifier (which also, ofc, ensures propagation of the aforementioned duplication slowness).
+> The TS team has worked hard to close this gap so type aliases don't de-opt to anonymous types as much - but it's still not 100% - very close though - I believe it's mostly just a few edge cases now.
+> So in the strict, "technically correct" sense - yes, interfaces are better for perf. But in the general sense - no, they should be about the same as type aliases. 
 
 ## Arguments
 
