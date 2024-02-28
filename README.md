@@ -192,7 +192,7 @@ In general, you should use string enums, but using number enums is okay in certa
 
 ## Should I care about imports? How can I avoid imports?
 
-- Sometimes, people worry about the imports in their TypeScript program. They might say something like: "this file has too many imports". Or: "I want to avoid importing this thing if possible, because it will clutter the imports". These kinds of concerns are irrelevant, because for most intents and purposes, **you should not count imports as being part of your program**.
+- Sometimes, people worry about the imports in their TypeScript program. They might say something like: "this file has too many imports". Or: "I want to avoid importing this thing if possible, because it will clutter the imports". These kinds of concerns are irrelevant, because for most intents and purposes, **you should not count imports as being part of your program**. The rest of this section will attempt to explain why.
 - If you are ever manually typing an import statement, something has gone horribly wrong. If you use a modern IDE such as [Visual Studio Code](https://code.visualstudio.com/), a variable or function that is located in another file will automatically be imported as soon as you tab-complete the name.
 - If you are ever manually deleting an import statement, something has gone horribly wrong. If you use the excellent [`prettier-plugin-organize-imports`](https://github.com/simonhaenisch/prettier-plugin-organize-imports) plugin (or something similar), unneeded import statements will be automatically deleted.
   - You should avoid using import statements for side-effects, as it is considered to be a terrible programming practice.
