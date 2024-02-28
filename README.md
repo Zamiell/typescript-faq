@@ -189,3 +189,17 @@ For these reasons, I recommend using TypeScript's official (string) enums over m
 In general, you should use string enums, but using number enums is okay in certain situations. See [this explanation](https://github.com/IsaacScript/isaacscript/blob/main/packages/eslint-plugin-isaacscript/docs/rules/strict-enums.md#number-enums-vs-string-enums).
 
 <br>
+
+## Should I care about imports? How can I avoid imports?
+
+- Sometimes, people worry about the imports in their TypeScript program. They might say something like: "this file has too many imports". Or: "I want to avoid importing this thing if possible, because it will clutter the imports". These kinds of concerns are irrelevant, because for most intents and purposes, **you should not count imports as being part of your program**.
+- If you are ever manually typing an import statement, something has gone horribly wrong. If you use a modern IDE such as [Visual Studio Code](https://code.visualstudio.com/), a variable or function that is located in another file will automatically be imported as soon as you tab-complete the name.
+- If you are ever manually deleting an import statement, something has gone horribly wrong. If you use the excellent [`prettier-plugin-organize-imports`](https://github.com/simonhaenisch/prettier-plugin-organize-imports) plugin (or something similar), unneeded import statements will be automatically deleted.
+  - You should avoid using import statements for side-effects, as it is considered to be a terrible programming practice.
+- So, if you never manually add imports, and you never manually remove imports, then imports are entirely federated by your IDE. Thus, you can think of imports in the same way as newlines handled by [Prettier](https://prettier.io/). Sometimes, Prettier will add newlines (when the line is getting too long), and sometimes Prettier will remove newlines (when multiple lines can be combined).
+- In conclusion, for most intents and purposes, you can simply ignore imports as being part of the program altogether. They shouldn't count as being a "line of code". They are simply editor-created glue.
+- But what about import readability? This does not matter because no-one has to read the imports. If someone wants to know where a function comes from, it is much easier to just press F12 on it (which is the VSCode hotkey for "Go to Definition"), rather than scroll to the top of the file and search through the import list.
+- But what about a lot of imports cluttering the file? Again, it only counts as "cluttering the file" if you count the import statements to be part of the program to begin with. For VSCode users, you can helpfully [configure it to automatically hide import statements](https://stackoverflow.com/questions/54656661/collapse-or-folding-import-statements-in-vscode-for-java-code), which is useful if the "clutter" annoys you.
+- But what about the cost of having to import something many times (instead of e.g. using a global variable)? Since IDE's automatically import anything you type, there is basically no "cost" to having to import something. But what about having to maintain all the extra lines of code in the program? That is only an issue if you consider them to be real lines of code. If you don't count them as actually being part of your program, then there is no extra maintenance burder.
+
+<br>
