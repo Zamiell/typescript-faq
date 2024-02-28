@@ -17,7 +17,7 @@ I have been heavily using [TypeScript](https://www.typescriptlang.org/) since 20
 - A common American expression is [Keep It Simple, Stupid](https://en.wikipedia.org/wiki/KISS_principle), or K.I.S.S. for short. The expression is nice because it encapulates the insight that simplicity should be a key goal in design.
 - Using TypeScript clearly makes things more complicated. Thus, you would only want to use it if the benefits outweigh the complexity cost. So, what are the benefits?
 - In JavaScript, you only find out about bugs in the code AFTER you run the program. These are called _run-time errors_, because they happen when the code runs. In software development, writing the code itself is not usually the time intensive part. Instead, the vast majority of the time drain comes from debugging the program:
-  - Users report a run-time error. (Dealing with users at all is very time intensive.)
+  - Users report a run-time error.
   - A lot of the time, when you redo the steps that the user took, it does not actually generate any errors, so you have to follow up with them and actually find reproducable steps to generate the problem.
   - Once you have a repro, you can use the stack trace to work your way backwards through the code and reverse-engineer why the bug is happening. (But this can take a really long time!)
   - Finally, once you know the cause, you can implement a fix.
