@@ -18,7 +18,7 @@ I have been heavily using [TypeScript](https://www.typescriptlang.org/) since 20
 - Using TypeScript clearly makes things more complicated. Thus, you would only want to use it if the benefits outweigh the complexity cost. So, what are the benefits?
 - In JavaScript, you only find out about bugs in the code AFTER you run the program. These are called _run-time errors_, because they happen when the code runs. In software development, writing the code itself is not usually the time intensive part. Instead, the vast majority of the time drain comes from debugging the program.
 - The benefits of TypeScript are that it alerts you to bugs in your codebase BEFORE you run the code. In other words, it converts most run-time errors into compile-time errors. "Compile-time errors" is just a fancy way of saying "a red squiggly line appear in your code editor". This is fantastic because it instantly alerts you to the problem and allows you to immediately fix it. (Otherwise, you would have to actually run the code, go through the menus, and do all of the specific steps in order to even see that anything was wrong.)
-- For small projects that are only a few hundred lines of code, you might not need the complexity TypeScript brings. But for anything that takes longer than a few hours to write, you will end up saving a tremendous amount of time if you start by using TypeScript from the get-go.
+- For small projects that are only a few hundred lines of code, understanding them and debugging them is going to be trivial, so you might not need the complexity TypeScript brings. But for anything larger than that, you will probably end up saving a tremendous amount of time if you start by using TypeScript from the get-go.
 
 <br>
 
