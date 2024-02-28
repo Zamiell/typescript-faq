@@ -31,7 +31,7 @@ So which should you use? Which is better? First, let's go over the differences.
 
 - `interface` can use declaration merging, which allows you to add new fields to an existing declared interface. For example, this is useful for augmenting `globals.Window`.
 - `type` can not be declaration merged.
-- On the one hand, a feature that `interface` has and `type` does not have should make `interface` win.
+- On the one hand, declaration merging is a feature that `interface` has and `type` does not have, so it should make `interface` win.
 - On the other hand, declaration merging is considered to be confusing and dangerous. Some people advocate using `type` just so that you can avoid it altogether.
 - While I think that avoiding `interface` just because declaration merging exists is a little too extreme (more on that later), we can probably say that there is no clear winner here.
 
