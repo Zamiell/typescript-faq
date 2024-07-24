@@ -37,7 +37,7 @@ I have been heavily using [TypeScript](https://www.typescriptlang.org/) since 20
 - So, if both `noUnusedLocals`/`noUnusedParameters` and `@typescript-eslint/no-unused-vars` can be used to catch unused variables, which should be used? Which is better?
 - The `@typescript-eslint/no-unused-vars` rule is better for several reasons:
   - The [official page for the `@typescript-eslint/no-unused-vars` rule gives a great explanation](https://typescript-eslint.io/rules/no-unused-vars#benefits-over-typescript) as to why it is better than `noUnusedLocals`/`noUnusedParameters`. (Disclaimer: I helped write it!) In short, the lint rule is more customizable and less likely to block builds.
-  - `noUnusedLocals`/`noUnusedParameters` were added back in 2016, but they have always been kind of an ad-hoc feature, since finding unused variables does not really have to do with types. It makes sense to let the TypeScript compiler handle the actual type-checking of your code and leave the linting tasks to ESLint. This results in a clear separation of concerns.
+  - `noUnusedLocals`/`noUnusedParameters` were added back in 2016, but they have always been kind of an ad-hoc feature, since finding unused variables does not really have to do with types. It makes sense to let the TypeScript compiler handle the actual type-checking of your code and leave the linting tasks to ESLint. This results in a more clear separation of concerns.
 - Thus, if the ESLint rule is better, then we should explicitly disable `noUnusedLocals` or `noUnusedParameters` in our "tsconfig.json" files and then make sure we enable the `@typescript-eslint/no-unused-vars` lint rule. Personally, I enable it like this:
 
 ```js
