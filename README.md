@@ -205,3 +205,23 @@ In general, you should use string enums, but using number enums is okay in certa
   - Counterpoint: Changing import statements can cause noise in commits. Thus, it can be argued that minimizing imports will also minimize git noise. While true, I envision a future where GitHub/GitLab automatically suppresses these spurious changes to improve UX, which would make this a non-issue.
 
 <br>
+
+## How do I use the `Result<T, E>` pattern from Rust in TypeScript?
+
+In [Rust](https://www.rust-lang.org/) and some other languages, it is idiomatic to work with a [`Result`](https://doc.rust-lang.org/std/result/) type, which forces the consumer of the type to check whether the result was ok or an error. This is an extremely useful pattern because historically, it was common to forget to handle the `null` case.
+
+However, this pattern is **not** idiomatic in TypeScript, because TypeScript is actually a bit more powerful than Rust in that it has direct union types. Meaning that if you wanted to make a function return both a number and a string in Rust, you would have to make an `enum` containing those two values. But in TypeScript, we can directly return `number | string` without making any other abstractions. Nice!
+
+This is why it is idiomatic in TypeScript to have a function return `Thing | undefined` rather than `Result<Thing, Error>`. This pairs well with the unique ability of the TypeScript compiler to [type-narrow](https://www.typescriptlang.org/docs/handbook/2/narrowing.html):
+
+```ts
+function work() {
+  const thing = getThing(); // Returns `Thing | undefined`
+  if (thing === undefined) {
+    return; // The early return pattern is often paired with type-narrowing.
+  }
+  // `thing` is now `Thing`.
+}
+```
+
+With that said, `Thing | undefined` is not exactly a fair comparison to `Result<Thing, Error`>, since the latter allows us to capture specific error information in order to pass it backwards through the calling stack. So the `Result` type is still used in some larger projects or when dealing with complex error states. In order to get `Result`, most TypeScript developers reach for [`fp-ts`](https://gcanti.github.io/fp-ts/) or [`ts-results`](https://github.com/vultix/ts-results). However, both of these libraries are somewhat controversial in the TypeScript ecosystem, since they can result in non-idiomatic and hard-to-understand TypeScript code.
