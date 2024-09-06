@@ -256,7 +256,7 @@ However, in TypeScript, we don't have the `?` operator that Rust does. So when e
 
 In Rust, the entire ecosystem already uses `Result`, so there is no buy-in cost. But in TypeScript, using `Result` is not idiomatic, so if you want to use it, you pay a steep cost!
 
-To recap, the functionality of `Option` can easily be achieved with `T | undefined`. But the functionality of `Result` is more powerful: it allows us to capture the specific information about the error inside of the type. But we can accomplish this with a simple union, similar to `T | undefined`:
+To recap, the functionality of `Option` can easily be achieved with `T | undefined`. But the functionality of `Result` is more powerful: it allows us to capture the specific information about the error inside of the type. But we can accomplish this with the simple union of `T | Error`:
 
 ```ts
 function work() {
