@@ -206,13 +206,13 @@ In general, you should use string enums, but using number enums is okay in certa
 
 <br>
 
-## How do I use the `Result<T, E>` pattern from Rust in TypeScript?
+## How can I use the `Option<T>` pattern from Rust in TypeScript?
 
-In [Rust](https://www.rust-lang.org/) and some other languages, it is idiomatic to work with a [`Result`](https://doc.rust-lang.org/std/result/) type, which forces the consumer of the type to check whether the result was ok or an error. This is an extremely useful pattern because historically, it was common to forget to handle the `null` case.
+In [Rust](https://www.rust-lang.org/) and some other languages, it is idiomatic to work with an [`Option`](https://doc.rust-lang.org/std/option/) type, which forces the consumer of the type to check if the value is `None`. (`None` is the same concept as `null` from other languages.) This is an extremely useful pattern because historically, it was common to forget to handle the `null` case, which would cause bugs and crashes.
 
 However, this pattern is **not** idiomatic in TypeScript, because TypeScript is actually a bit more powerful than Rust in that it has direct union types. Meaning that if you wanted to make a function return both a number and a string in Rust, you would have to make an `enum` containing those two values. But in TypeScript, we can directly return `number | string` without making any other abstractions. Nice!
 
-This is why it is idiomatic in TypeScript to have a function return `Thing | undefined` rather than `Result<Thing, Error>`. This pairs well with the unique ability of the TypeScript compiler to [type-narrow](https://www.typescriptlang.org/docs/handbook/2/narrowing.html):
+This is why it is idiomatic in TypeScript to have a function return `Foo | undefined` rather than `Option<Foo>`. This pairs well with the unique ability of the TypeScript compiler to [type-narrow](https://www.typescriptlang.org/docs/handbook/2/narrowing.html):
 
 ```ts
 function work() {
@@ -224,4 +224,52 @@ function work() {
 }
 ```
 
-With that said, `Thing | undefined` is not exactly a fair comparison to `Result<Thing, Error>`, since the latter allows us to capture specific error information in order to pass it backwards through the calling stack. So the `Result` type is still used in some larger projects or when dealing with complex error states. In order to get `Result`, most developers reach for [`fp-ts`](https://gcanti.github.io/fp-ts/) or [`ts-results`](https://github.com/vultix/ts-results). However, both of these libraries are somewhat controversial in the TypeScript ecosystem, since they can result in non-idiomatic and hard-to-understand code.
+In conclusion, you should use `T | undefined` in TypeScript instead of trying to emulate `Option`.
+
+<br>
+
+## How can I use the `Result<T, E>` pattern from Rust in TypeScript?
+
+First, see the previous section on `Option<T>`.
+
+In Rust, it is also idiomatic to use a [`Result`](https://doc.rust-lang.org/std/result/) type, which is similar to `Option` type in that it forces the consumer to check if an error happened. However, using `Result` is not idiomatic in TypeScript.
+
+### Reason 1 - It’s Not Idiomatic Because It's Explicitly Excluded From the Language
+
+Why doesn't TypeScript use its type system to represent errors? This has been an oft-requested feature of the language. But in 2023, the TypeScript team decided against implementing it, with [Ryan Cavanaugh giving extensive reasoning behind the decision](https://github.com/microsoft/TypeScript/issues/13219#issuecomment-1515037604). It's an excellent read!
+
+### Reason 2 - It’s Not Idiomatic Because Typescript Does Not Have Easy Error Handling
+
+Consider the case of [Golang](https://go.dev/). When the language was released back in 2012, its error handling was praised as one of the best parts of the language. Since errors are return values, they are no longer a surprise footgun: you can read a function signature to know for sure whether or not it can throw an error.
+
+But now that we have had over 10 years of experience with Golang, people have found that the error handling to be a double-edged sword:
+
+<img src="https://pbs.twimg.com/media/DCIF7-2W0AEAv9c.jpg" alt="Golang Keyboard" width="385" height="239"/>
+
+The joke here is that in your Golang code, you almost always have a ton of boilerplate to pass errors up the call stack. It can get very repetive and verbose.
+
+Rust was released in 2015, three years after Golang. Rust addresses this problem with the [`?` operator](https://doc.rust-lang.org/rust-by-example/std/result/question_mark.html), which allows you to pass an error up the call stack with a single character. It can be combined with libraries like [`anyhow`](https://docs.rs/anyhow/latest/anyhow/) to easily attach error metadata, making error handling much nicer.
+
+However, in TypeScript, we don't have the `?` operator that Rust does. So when errors are represented in the type system, we are forced into the same type of boilerplate as Golang programmers. 
+
+### Conclusion
+
+In Rust, the entire ecosystem already uses `Result`, so there is no buy-in cost. But in TypeScript, using `Result` is not idiomatic, so if you want to use it, you pay a steep cost!
+
+To recap, the functionality of `Option` can easily be achieved with `T | undefined`. But the functionality of `Result` is more powerful: it allows us to capture the specific information about the error inside of the type. But we can accomplish this with a simple union, similar `T | undefined`:
+
+```ts
+function work() {
+  const thing = getThing(); // Returns `Thing | Error`
+  if (thing instanceof Error) {
+    return thing; // The early return pattern is often paired with type-narrowing.
+  }
+  // `thing` is now `Thing`.
+}
+```
+
+Also note that for most purposes, passing the specific error information up the call stack is overboard. You might just want to log the error (with a stack trace, if necessary) and return `T | undefined`. (This forces upstream functions to handle the error in slightly more idiomatic way.)
+
+### Other Considerations
+
+If your TypeScript project deals with complex error states and you think the benefits of `Result` outweigh the costs of it not being idiomatic, then you might want to reach for the [Effect library](https://effect.website/). (Effect is the spiritual successor to the popular [`fp-ts`](https://gcanti.github.io/fp-ts/) library.)
