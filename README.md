@@ -238,7 +238,7 @@ In Rust, it is also idiomatic to use a [`Result<T, E>`](https://doc.rust-lang.or
 
 Why doesn't TypeScript use its type system to represent errors? This has been an oft-requested feature of the language. But in 2023, the TypeScript team decided against implementing it, with [Ryan Cavanaugh giving extensive reasoning behind the decision](https://github.com/microsoft/TypeScript/issues/13219#issuecomment-1515037604). It's an excellent read!
 
-### Reason 2 - Typescript Does Not Have Easy Error Handling
+### Reason 2 - Typescript Does Not Have Concise Error Handling
 
 Consider the case of [Golang](https://go.dev/). When the language was released back in 2012, its error handling was praised as one of the best parts of the language. Since errors are return values, they are no longer a surprise footgun: you can read a function signature to know for sure whether or not it can throw an error.
 
