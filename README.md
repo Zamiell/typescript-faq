@@ -224,7 +224,7 @@ function work() {
 }
 ```
 
-In conclusion, you should use `T | undefined` in TypeScript instead of trying to emulate `Option`.
+In conclusion, you should use `T | undefined` in TypeScript instead of trying to emulate `Option<T>`.
 
 <br>
 
