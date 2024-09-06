@@ -234,11 +234,11 @@ First, see the previous section on `Option<T>`.
 
 In Rust, it is also idiomatic to use a [`Result<T, E>`](https://doc.rust-lang.org/std/result/) type, which is similar to `Option<T>` in that it forces the consumer to check if an error happened. However, using `Result` is not idiomatic in TypeScript.
 
-### Reason 1 - It’s Not Idiomatic Because It's Explicitly Excluded From the Language
+### Reason 1 - It Is Explicitly Excluded From the Language
 
 Why doesn't TypeScript use its type system to represent errors? This has been an oft-requested feature of the language. But in 2023, the TypeScript team decided against implementing it, with [Ryan Cavanaugh giving extensive reasoning behind the decision](https://github.com/microsoft/TypeScript/issues/13219#issuecomment-1515037604). It's an excellent read!
 
-### Reason 2 - It’s Not Idiomatic Because Typescript Does Not Have Easy Error Handling
+### Reason 2 - Typescript Does Not Have Easy Error Handling
 
 Consider the case of [Golang](https://go.dev/). When the language was released back in 2012, its error handling was praised as one of the best parts of the language. Since errors are return values, they are no longer a surprise footgun: you can read a function signature to know for sure whether or not it can throw an error.
 
