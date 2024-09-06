@@ -208,11 +208,11 @@ In general, you should use string enums, but using number enums is okay in certa
 
 ## How can I use the `Option<T>` pattern from Rust in TypeScript?
 
-In [Rust](https://www.rust-lang.org/) and some other languages, it is idiomatic to work with an [`Option`](https://doc.rust-lang.org/std/option/) type, which forces the consumer of the type to check if the value is `None`. (`None` is the same concept as `null` from other languages.) This is an extremely useful pattern because historically, it was common to forget to handle the `null` case, which would cause bugs and crashes.
+In [Rust](https://www.rust-lang.org/), it is idiomatic to work with an [`Option<T>`](https://doc.rust-lang.org/std/option/) type, which forces the consumer of the type to check if the value is `None`. (`None` is the same concept as `null` from other languages.) This is an extremely useful pattern because historically, it was common to forget to handle the `null` case, which would cause bugs and crashes.
 
 However, this pattern is **not** idiomatic in TypeScript, because TypeScript is actually a bit more powerful than Rust in that it has direct union types. Meaning that if you wanted to make a function return both a number and a string in Rust, you would have to make an `enum` containing those two values. But in TypeScript, we can directly return `number | string` without making any other abstractions. Nice!
 
-This is why it is idiomatic in TypeScript to have a function return `Foo | undefined` rather than `Option<Foo>`. This pairs well with the unique ability of the TypeScript compiler to [type-narrow](https://www.typescriptlang.org/docs/handbook/2/narrowing.html):
+This is why it is idiomatic in TypeScript to have a function return `T | undefined` rather than `Option<T>`. This pairs well with the unique ability of the TypeScript compiler to [type-narrow](https://www.typescriptlang.org/docs/handbook/2/narrowing.html):
 
 ```ts
 function work() {
@@ -232,7 +232,7 @@ In conclusion, you should use `T | undefined` in TypeScript instead of trying to
 
 First, see the previous section on `Option<T>`.
 
-In Rust, it is also idiomatic to use a [`Result`](https://doc.rust-lang.org/std/result/) type, which is similar to `Option` type in that it forces the consumer to check if an error happened. However, using `Result` is not idiomatic in TypeScript.
+In Rust, it is also idiomatic to use a [`Result<T, E>`](https://doc.rust-lang.org/std/result/) type, which is similar to `Option<T>` type in that it forces the consumer to check if an error happened. However, using `Result` is not idiomatic in TypeScript.
 
 ### Reason 1 - It’s Not Idiomatic Because It's Explicitly Excluded From the Language
 
