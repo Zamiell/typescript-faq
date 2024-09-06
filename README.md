@@ -232,7 +232,7 @@ In conclusion, you should use `T | undefined` in TypeScript instead of trying to
 
 First, see the previous section on `Option<T>`.
 
-In Rust, it is also idiomatic to use a [`Result<T, E>`](https://doc.rust-lang.org/std/result/) type, which is similar to `Option<T>` type in that it forces the consumer to check if an error happened. However, using `Result` is not idiomatic in TypeScript.
+In Rust, it is also idiomatic to use a [`Result<T, E>`](https://doc.rust-lang.org/std/result/) type, which is similar to `Option<T>` in that it forces the consumer to check if an error happened. However, using `Result` is not idiomatic in TypeScript.
 
 ### Reason 1 - It’s Not Idiomatic Because It's Explicitly Excluded From the Language
 
