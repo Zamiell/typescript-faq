@@ -155,4 +155,4 @@ For tiny projects (like one-off scripts), using JSDoc types makes a lot of sense
 
 But as soon as your project grows larger than a single file, you should probably start to think about converting your code to TypeScript.
 
-Part of the problem here is that setting up TypeScript + ESLint by hand can be time-intensive. One possible solution is to simply bootstrap all of your new projects, big or small, through a TypeScript + ESLint project bootstrapper such as [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app) or my personal tool [`isaacscript init-ts`](https://isaacscript.github.io/main/isaacscript-in-typescript).
+Part of the problem here is that setting up TypeScript + ESLint by hand can be time-intensive. One possible solution is to simply bootstrap all of your new projects, big or small, through a TypeScript + ESLint project bootstrapper such as [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app) or my personal tool [`complete-cli`](https://complete-ts.github.io/complete-cli).
