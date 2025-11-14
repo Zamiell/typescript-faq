@@ -32,7 +32,7 @@ I have been heavily using [TypeScript](https://www.typescriptlang.org/) since 20
 - [`noUnusedLocals`](https://www.typescriptlang.org/tsconfig#noUnusedLocals) is a TypeScript compiler option that checks for unused local variables. By default, it is set to false.
 - [`noUnusedParameters`](https://www.typescriptlang.org/tsconfig#noUnusedParameters) is a TypeScript compiler option that checks for unused function parameters. By default, it is set to false.
 - TypeScript can be configured to be very lax or very strict. By default, it is very lax. My TypeScript philosophy is that you should configure it to be **as strict as possible**. That way, it can catch as many bugs as possible. From this philosophy, it follows that we would want to enable both of these options. And indeed, they are both enabled in the [`@tsconfig/strictest`](https://github.com/tsconfig/bases/blob/main/bases/strictest.json) configuration, which everyone should extend from in their project "tsconfig.json" files.
-- If our goal is to catch as many bugs as possible, we should also be running a linter on our TypeScript code in addition to running the TypeScript compiler. [ESLint](https://eslint.org/) is the best JavaScript/TypeScript linter in the world. So, we should be using ESLint along with a configuration that enables [as many good lint rules as possible](https://isaacscript.github.io/eslint-config-isaacscript), including [most of the rules from the `typescript-eslint` project](https://typescript-eslint.io/rules/).
+- If our goal is to catch as many bugs as possible, we should also be running a linter on our TypeScript code in addition to running the TypeScript compiler. [ESLint](https://eslint.org/) is the best JavaScript/TypeScript linter in the world. So, we should be using ESLint along with a configuration that enables [as many good lint rules as possible](https://complete-ts.github.io/eslint-config-complete), including [most of the rules from the `typescript-eslint` project](https://typescript-eslint.io/rules/).
 - The `typescript-eslint` project provides a rule called [`@typescript-eslint/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) that finds unused variables. If you have this rule turned on, then you do not need to turn on `noUnusedLocals` or `noUnusedParameters`. Otherwise, you would get double messages for unused variables inside of your IDE instead of just one.
 - So, if both `noUnusedLocals`/`noUnusedParameters` and `@typescript-eslint/no-unused-vars` can be used to catch unused variables, which should be used? Which is better?
 - The `@typescript-eslint/no-unused-vars` rule is better for several reasons:
@@ -57,7 +57,7 @@ I have been heavily using [TypeScript](https://www.typescriptlang.org/) since 20
 ```
 
 - The actual TypeScript codebase itself also [agrees that the ESLint rule is better](https://github.com/microsoft/TypeScript/pull/57123).
-- If you don't want to manually enable individual ESLint rules one by one like this, you can use [`eslint-config-isaacscript`](https://isaacscript.github.io/eslint-config-isaacscript), which is a sharable configuration for ESLint that you can use in any TypeScript project.
+- If you don't want to manually enable individual ESLint rules one by one like this, you can use [`eslint-config-complete`](https://complete-ts.github.io/eslint-config-complete), which is a sharable configuration for ESLint that you can use in any TypeScript project.
 
 <br>
 
@@ -186,7 +186,7 @@ For these reasons, I recommend using TypeScript's official (string) enums over m
 
 ## Should I use number enums or string enums?
 
-In general, you should use string enums, but using number enums is okay in certain situations. See [this explanation](https://github.com/IsaacScript/isaacscript/blob/main/packages/eslint-plugin-isaacscript/docs/rules/strict-enums.md#number-enums-vs-string-enums).
+In general, you should use string enums, but using number enums is okay in certain situations. See [this explanation](https://complete-ts.github.io/eslint-plugin-complete/rules/strict-enums#number-enums-vs-string-enums).
 
 <br>
 
