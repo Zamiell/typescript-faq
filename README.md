@@ -273,3 +273,7 @@ Also note that for most purposes, passing the specific error information up the 
 ### Other Considerations
 
 If your TypeScript project deals with complex error states and you think the benefits of `Result` outweigh the costs of it not being idiomatic, then you might want to reach for the [Effect library](https://effect.website/). (Effect is the spiritual successor to the popular [`fp-ts`](https://gcanti.github.io/fp-ts/) library.)
+
+## Should I use the `private` keyword or `#`?
+
+See: https://github.com/typescript-eslint/typescript-eslint/issues/4571#issuecomment-1272609077
